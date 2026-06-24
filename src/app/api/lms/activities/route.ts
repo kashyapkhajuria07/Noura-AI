@@ -1,0 +1,40 @@
+import { NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth/auth-options';
+import { lmsService } from '@/lib/lms/service';
+
+export async function GET(request: Request) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { searchParams } = new URL(request.url);
+  const courseId = searchParams.get('courseId');
+  const type = searchParams.get('type');
+  const limit = Math.min(Number(searchParams.get('limit')) || 50, 200);
+
+  const lms = (session.user as any).lms ?? 'mock';
+
+  try {
+    const data = await lmsService.fetch({
+      provider: lms,
+      accessToken: (session as any).accessToken,
+      userId: session.user.id,
+    });
+
+    let activities = data.activities;
+
+    if (courseId) activities = activities.filter((a) => a.courseId === courseId);
+    if (type) activities = activities.filter((a) => a.type === type);
+
+    return NextResponse.json({
+      data: activities.slice(0, limit),
+      total: activities.length,
+      fetchedAt: data.fetchedAt,
+    });
+  } catch (error) {
+    console.error('Failed to fetch activities:', error);
+    return NextResponse.json({ error: 'Failed to fetch activities' }, { status: 500 });
+  }
+}

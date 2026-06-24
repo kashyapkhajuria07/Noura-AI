@@ -1,0 +1,237 @@
+[11:48:11.478] [INFO] Initializing Storybook
+[11:48:11.619] [DEBUG] Getting package.json info for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:11.619] [INFO] Package manager: npm
+[11:48:11.620] [DEBUG] Getting CLI versions from NPM for storybook...
+[11:48:11.620] [DEBUG] Executing command: npm info storybook version
+[11:48:12.182] [INFO] Adding Storybook version 10.4.6 to your project
+[11:48:12.183] [DEBUG] Executing command: npm config get min-release-age --workspaces=false --include-workspace-root
+[11:48:12.289] [INFO] Installing Storybook for user specified project type: nextjs
+[11:48:12.290] [DEBUG] Using cached package.json for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:12.294] [INFO] Framework detected: nextjs-vite
+[11:48:12.295] [DEBUG] Getting installed version for vitest...
+[11:48:12.295] [DEBUG] Executing command: npm ls --json --depth=99 2>/dev/null
+[11:48:12.697] [DEBUG] Executing command: npm ls --json --depth=0 2>/dev/null
+[11:48:13.041] [DEBUG] Error finding installations for vitest: ExecaError: Command failed with exit code 1: npm ls --json '--depth=0' '2>/dev/null'
+
+{
+  "version": "1.0.0",
+  "name": "student-burnout"
+}
+[11:48:13.041] [DEBUG] No installations found for vitest
+[11:48:13.041] [DEBUG] Getting installed version for msw...
+[11:48:13.041] [DEBUG] Executing command: npm ls --json --depth=99 2>/dev/null
+[11:48:13.448] [DEBUG] Executing command: npm ls --json --depth=0 2>/dev/null
+[11:48:13.793] [DEBUG] Error finding installations for msw: ExecaError: Command failed with exit code 1: npm ls --json '--depth=0' '2>/dev/null'
+
+{
+  "version": "1.0.0",
+  "name": "student-burnout"
+}
+[11:48:13.793] [DEBUG] No installations found for msw
+[11:48:13.796] [INFO] Storybook collects completely anonymous usage telemetry. We use it to shape Storybook's roadmap and prioritize features. You can learn more, including how to opt out, at https://storybook.js.org/telemetry
+[11:48:19.050] [DEBUG] Using cached package.json for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:19.050] [DEBUG] Using cached package.json for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:19.050] [DEBUG] Using cached package.json for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:19.050] [INFO] - Configuring ESLint plugin
+[11:48:19.051] [DEBUG] Detected JSON config at /Users/kashyapkhajuria/Desktop/student burnout/.eslintrc.json
+[11:48:19.054] [DEBUG] Using cached version for storybook...
+[11:48:19.054] [DEBUG] Getting CLI versions from NPM for @storybook/nextjs-vite...
+[11:48:19.054] [DEBUG] Executing command: npm info @storybook/nextjs-vite version
+[11:48:19.057] [DEBUG] Getting CLI versions from NPM for @chromatic-com/storybook...
+[11:48:19.057] [DEBUG] Executing command: npm info @chromatic-com/storybook version
+[11:48:19.061] [DEBUG] Getting CLI versions from NPM for @storybook/addon-vitest...
+[11:48:19.061] [DEBUG] Executing command: npm info @storybook/addon-vitest version
+[11:48:19.064] [DEBUG] Getting CLI versions from NPM for @storybook/addon-a11y...
+[11:48:19.064] [DEBUG] Executing command: npm info @storybook/addon-a11y version
+[11:48:19.068] [DEBUG] Getting CLI versions from NPM for @storybook/addon-docs...
+[11:48:19.068] [DEBUG] Executing command: npm info @storybook/addon-docs version
+[11:48:19.071] [DEBUG] Getting CLI versions from NPM for @storybook/addon-mcp...
+[11:48:19.071] [DEBUG] Executing command: npm info @storybook/addon-mcp version
+[11:48:19.075] [DEBUG] Getting CLI versions from NPM for vite...
+[11:48:19.075] [DEBUG] Executing command: npm info vite version
+[11:48:19.081] [DEBUG] Getting CLI versions from NPM for eslint-plugin-storybook...
+[11:48:19.081] [DEBUG] Executing command: npm info eslint-plugin-storybook version
+[11:48:22.534] [INFO] - Configuring main.ts
+[11:48:22.536] [INFO] - Configuring preview.ts
+[11:48:22.536] [INFO] - Adding Storybook command to package.json
+[11:48:22.537] [DEBUG] Getting package.json info for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:22.537] [DEBUG] Using cached package.json for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:22.537] [DEBUG] Using cached package.json for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:22.538] [INFO] - Copying framework templates
+[11:48:22.567] [DEBUG] Executing command: npm config get registry --workspaces=false --include-workspace-root
+[11:48:23.171] [INFO] Storybook configuration generated
+[11:48:23.171] [DEBUG] Using cached package.json for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:23.171] [DEBUG] Using cached installed version for vitest...
+[11:48:23.171] [DEBUG] Getting installed version for @vitest/coverage-v8...
+[11:48:23.171] [DEBUG] Executing command: npm ls --json --depth=99 2>/dev/null
+[11:48:23.641] [DEBUG] Executing command: npm ls --json --depth=0 2>/dev/null
+[11:48:24.002] [DEBUG] Error finding installations for @vitest/coverage-v8: ExecaError: Command failed with exit code 1: npm ls --json '--depth=0' '2>/dev/null'
+
+{
+  "version": "1.0.0",
+  "name": "student-burnout"
+}
+[11:48:24.002] [DEBUG] No installations found for @vitest/coverage-v8
+[11:48:24.002] [DEBUG] Getting installed version for @vitest/coverage-istanbul...
+[11:48:24.002] [DEBUG] Executing command: npm ls --json --depth=99 2>/dev/null
+[11:48:24.416] [DEBUG] Executing command: npm ls --json --depth=0 2>/dev/null
+[11:48:24.753] [DEBUG] Error finding installations for @vitest/coverage-istanbul: ExecaError: Command failed with exit code 1: npm ls --json '--depth=0' '2>/dev/null'
+
+{
+  "version": "1.0.0",
+  "name": "student-burnout"
+}
+[11:48:24.753] [DEBUG] No installations found for @vitest/coverage-istanbul
+[11:48:24.754] [INFO] Adding devDependencies:
+- storybook@^10.4.6
+- @storybook/nextjs-vite@^10.4.6
+- @chromatic-com/storybook@^5.2.1
+- @storybook/addon-vitest@^10.4.6
+- @storybook/addon-a11y@^10.4.6
+- @storybook/addon-docs@^10.4.6
+- @storybook/addon-mcp@^0.6.0
+- vite@^8.1.0
+- eslint-plugin-storybook@^10.4.6
+- vitest
+- playwright
+- @vitest/browser-playwright
+- @vitest/coverage-v8
+[11:48:24.754] [DEBUG] Using cached package.json for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:24.754] [DEBUG] Using cached version for storybook...
+[11:48:24.755] [DEBUG] Using cached version for @storybook/nextjs-vite...
+[11:48:24.755] [DEBUG] Using cached version for @chromatic-com/storybook...
+[11:48:24.755] [DEBUG] Using cached version for @storybook/addon-vitest...
+[11:48:24.755] [DEBUG] Using cached version for @storybook/addon-a11y...
+[11:48:24.755] [DEBUG] Using cached version for @storybook/addon-docs...
+[11:48:24.755] [DEBUG] Using cached version for @storybook/addon-mcp...
+[11:48:24.755] [DEBUG] Using cached version for vite...
+[11:48:24.755] [DEBUG] Using cached version for eslint-plugin-storybook...
+[11:48:24.755] [DEBUG] Getting CLI versions from NPM for vitest...
+[11:48:24.755] [DEBUG] Executing command: npm info vitest version
+[11:48:25.227] [DEBUG] Getting CLI versions from NPM for playwright...
+[11:48:25.227] [DEBUG] Executing command: npm info playwright version
+[11:48:26.720] [DEBUG] Getting CLI versions from NPM for @vitest/browser-playwright...
+[11:48:26.720] [DEBUG] Executing command: npm info @vitest/browser-playwright version
+[11:48:27.080] [DEBUG] Getting CLI versions from NPM for @vitest/coverage-v8...
+[11:48:27.080] [DEBUG] Executing command: npm info @vitest/coverage-v8 version
+[11:48:27.443] [DEBUG] Using cached package.json for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:27.443] [INFO] Dependencies added to package.json
+[11:48:27.444] [INFO] Installing dependencies...
+[11:48:27.444] [INFO] Installing dependencies...
+[11:48:27.444] [DEBUG] Executing command: npm install
+[11:48:55.946] [INFO] Installing dependencies...: 
+added 197 packages, and audited 586 packages in 28s
+
+202 packages are looking for funding
+
+[11:48:55.946] [INFO] Installing dependencies...: added 197 packages, and a
+[11:48:55.947] [INFO] Installing dependencies...:   run `npm fund` for details
+
+[11:48:55.947] [INFO] Installing dependencies...: run `npm fund` for detail
+[11:48:56.035] [INFO] Installing dependencies...: 
+2 vulnerabilities (1 moderate, 1 high)
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+[11:48:56.035] [INFO] Installing dependencies...: 2 vulnerabilities (1 mode
+[11:48:56.057] [INFO] Dependencies installed
+[11:48:56.057] [INFO] Dependencies installed
+[11:48:56.059] [INFO] Configuring @chromatic-com/storybook...
+[11:48:56.060] [INFO] @chromatic-com/storybook configured
+
+[11:48:56.061] [INFO] Configuring @storybook/addon-vitest...
+[11:48:56.064] [DEBUG] Getting package.json info for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:56.064] [DEBUG] Using cached package.json for /Users/kashyapkhajuria/Desktop/student burnout/package.json...
+[11:48:56.064] [DEBUG] Getting installed version for vitest...
+[11:48:56.064] [DEBUG] Executing command: npm ls --json --depth=99 2>/dev/null
+[11:48:56.811] [DEBUG] Executing command: npm ls --json --depth=0 2>/dev/null
+[11:48:57.197] [DEBUG] Error finding installations for vitest: ExecaError: Command failed with exit code 1: npm ls --json '--depth=0' '2>/dev/null'
+
+{
+  "version": "1.0.0",
+  "name": "student-burnout"
+}
+[11:48:57.197] [DEBUG] No installations found for vitest
+[11:48:57.197] [DEBUG] Vitest version specifier: 4.1.9
+[11:48:57.315] [DEBUG] Using cached installed version for vitest...
+[11:48:57.315] [DEBUG] Getting installed version for msw...
+[11:48:57.315] [DEBUG] Executing command: npm ls --json --depth=99 2>/dev/null
+[11:48:57.813] [DEBUG] Executing command: npm ls --json --depth=0 2>/dev/null
+[11:48:58.117] [DEBUG] Error finding installations for msw: ExecaError: Command failed with exit code 1: npm ls --json '--depth=0' '2>/dev/null'
+
+{
+  "version": "1.0.0",
+  "name": "student-burnout"
+}
+[11:48:58.117] [DEBUG] No installations found for msw
+[11:48:58.122] [INFO] Creating a Vitest config file:
+[11:48:58.122] [INFO] /Users/kashyapkhajuria/Desktop/student burnout/vitest.config.ts
+[11:48:58.128] [INFO] Setting up a11y addon for @storybook/addon-vitest
+[11:48:58.128] [INFO] Setting up a11y addon for @storybook/addon-vitest
+[11:48:58.129] [DEBUG] Executing command: npx storybook@10.4.6 automigrate addon-a11y-addon-test --loglevel silent --yes --skip-doctor --package-manager npm --skip-install
+[11:49:49.314] [INFO] a11y addon setup successfully
+[11:49:49.314] [INFO] a11y addon setup successfully
+[11:49:49.315] [INFO] @storybook/addon-vitest setup completed successfully
+[11:49:49.316] [INFO] @storybook/addon-vitest is now configured and you're ready to run your tests!
+Here are a couple of tips to get you started:
+
+• You can run tests with "npx vitest"
+• Vitest IDE extension shows all stories as tests in your editor!
+
+Check the documentation for more information about its features and options at:
+https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
+[11:49:49.320] [INFO] @storybook/addon-vitest configured
+
+[11:49:49.320] [INFO] Configuring @storybook/addon-a11y...
+[11:49:49.322] [DEBUG] Executing command: npx storybook@10.4.6 automigrate addon-a11y-addon-test --loglevel silent --skip-doctor --yes --package-manager npm --config-dir .storybook
+[11:50:32.733] [INFO] @storybook/addon-a11y configured
+
+[11:50:32.734] [INFO] Configuring @storybook/addon-docs...
+[11:50:32.740] [INFO] @storybook/addon-docs configured
+
+[11:50:32.740] [INFO] Configuring @storybook/addon-mcp...
+[11:50:32.742] [INFO] @storybook/addon-mcp configured
+
+[11:50:32.742] [INFO] Addons configured successfully
+[11:50:32.742] [INFO] ✅ @chromatic-com/storybook
+[11:50:32.743] [INFO] ✅ @storybook/addon-vitest
+[11:50:32.743] [INFO] ✅ @storybook/addon-a11y
+[11:50:32.743] [INFO] ✅ @storybook/addon-docs
+[11:50:32.743] [INFO] ✅ @storybook/addon-mcp
+[11:50:32.745] [INFO] Installing Playwright browser binaries (press "c" to abort)
+[11:50:32.745] [INFO] Installing Playwright browser binaries (press "c" to abort)
+[11:50:32.746] [DEBUG] Executing command: npx playwright install chromium --with-deps
+[11:50:34.083] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/mac-arm64/chrome-mac-arm64.zip
+
+[11:50:34.083] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome for Te
+[11:50:41.462] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/mac-arm64/chrome-mac-arm64.zip
+
+[11:50:41.462] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome for Te
+[11:50:41.710] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/mac-arm64/chrome-mac-arm64.zip
+
+[11:50:41.710] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome for Te
+[11:50:41.964] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/mac-arm64/chrome-mac-arm64.zip
+
+[11:50:41.964] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome for Te
+[11:50:42.235] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/mac-arm64/chrome-mac-arm64.zip
+
+[11:50:42.235] [INFO] Installing Playwright browser binaries (press "c" to abort): Downloading Chrome for Te
+[11:50:42.473] [INFO] Installing Playwright browser binaries (press "c" to abort): Failed to install browsers
+Error: Failed to download Chrome for Testing 149.0.7827.55 (playwright chromium v1228), caused by
+Error: Download failure, code=1
+    at ChildProcess.<anonymous> (/Users/kashyapkhajuria/Desktop/student burnout/node_modules/playwright-core/lib/coreBundle.js:27793:32)
+    at ChildProcess.emit (node:events:519:28)
+    at ChildProcess._handle.onexit (node:internal/child_process:293:12)
+
+[11:50:42.473] [INFO] Installing Playwright browser binaries (press "c" to abort): Failed to install browser
+[11:50:42.491] [ERROR] An error occurred while installing Playwright browser binaries. Please run the following command later: npx playwright install chromium --with-deps {"error":"ExecaError: Command failed with exit code 1: npx playwright install chromium --with-deps\n\nError: getaddrinfo ENOTFOUND cdn.playwright.dev\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:internal/dns/promises:101:17) {\n  errno: -3008,\n  code: 'ENOTFOUND',\n  syscall: 'getaddrinfo',\n  hostname: 'cdn.playwright.dev'\n}\nError: getaddrinfo ENOTFOUND cdn.playwright.dev\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:internal/dns/promises:101:17) {\n  errno: -3008,\n  code: 'ENOTFOUND',\n  syscall: 'getaddrinfo',\n  hostname: 'cdn.playwright.dev'\n}\nError: getaddrinfo ENOTFOUND cdn.playwright.dev\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:internal/dns/promises:101:17) {\n  errno: -3008,\n  code: 'ENOTFOUND',\n  syscall: 'getaddrinfo',\n  hostname: 'cdn.playwright.dev'\n}\nError: getaddrinfo ENOTFOUND cdn.playwright.dev\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:internal/dns/promises:101:17) {\n  errno: -3008,\n  code: 'ENOTFOUND',\n  syscall: 'getaddrinfo',\n  hostname: 'cdn.playwright.dev'\n}\nError: getaddrinfo ENOTFOUND cdn.playwright.dev\n    at GetAddrInfoReqWrap.onlookupall [as oncomplete] (node:internal/dns/promises:101:17) {\n  errno: -3008,\n  code: 'ENOTFOUND',\n  syscall: 'getaddrinfo',\n  hostname: 'cdn.playwright.dev'\n}\n\nDownloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/mac-arm64/chrome-mac-arm64.zip\nDownloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/mac-arm64/chrome-mac-arm64.zip\nDownloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/mac-arm64/chrome-mac-arm64.zip\nDownloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/mac-arm64/chrome-mac-arm64.zip\nDownloading Chrome for Testing 149.0.7827.55 (playwright chromium v1228) from https://cdn.playwright.dev/builds/cft/149.0.7827.55/mac-arm64/chrome-mac-arm64.zip\nFailed to install browsers\nError: Failed to download Chrome for Testing 149.0.7827.55 (playwright chromium v1228), caused by\nError: Download failure, code=1\n    at ChildProcess.<anonymous> (/Users/kashyapkhajuria/Desktop/student burnout/node_modules/playwright-core/lib/coreBundle.js:27793:32)\n    at ChildProcess.emit (node:events:519:28)\n    at ChildProcess._handle.onexit (node:internal/child_process:293:12)\n    at getFinalError (file:///Users/kashyapkhajuria/.npm/_npx/60944b67ced26ac3/node_modules/storybook/dist/_node-chunks/chunk-6U2XPXR7.js:11529:10)\n    at makeError (file:///Users/kashyapkhajuria/.npm/_npx/60944b67ced26ac3/node_modules/storybook/dist/_node-chunks/chunk-6U2XPXR7.js:13065:15)\n    at getAsyncResult (file:///Users/kashyapkhajuria/.npm/_npx/60944b67ced26ac3/node_modules/storybook/dist/_node-chunks/chunk-6U2XPXR7.js:15711:158)\n    at handlePromise (file:///Users/kashyapkhajuria/.npm/_npx/60944b67ced26ac3/node_modules/storybook/dist/_node-chunks/chunk-6U2XPXR7.js:15697:162)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Object.executeTaskWithSpinner (file:///Users/kashyapkhajuria/.npm/_npx/60944b67ced26ac3/node_modules/storybook/dist/_node-chunks/chunk-YBD2A4LF.js:3683:11)\n    at async AddonVitestService.installPlaywright (file:///Users/kashyapkhajuria/.npm/_npx/60944b67ced26ac3/node_modules/storybook/dist/_node-chunks/chunk-WPDWCGPK.js:5856:17)\n    at async AddonConfigurationCommand.execute (file:///Users/kashyapkhajuria/.npm/_npx/60944b67ced26ac3/node_modules/create-storybook/dist/_node-chunks/chunk-SGWNRTQ7.js:2197:26)\n    at async doInitiate (file:///Users/kashyapkhajuria/.npm/_npx/60944b67ced26ac3/node_modules/create-storybook/dist/_node-chunks/chunk-SGWNRTQ7.js:3547:3)\n    at async file:///Users/kashyapkhajuria/.npm/_npx/60944b67ced26ac3/node_modules/create-storybook/dist/_node-chunks/chunk-SGWNRTQ7.js:3590:20"}
+[11:50:42.491] [ERROR] An error occurred while installing Playwright browser binaries. Please run the following command later: npx playwright install chromium --with-deps
+[11:50:44.400] [WARN] Storybook setup completed, but some non-blocking errors occurred. Please check the log file below for details.
+[11:50:44.400] [INFO] To run Storybook, run npm run storybook. CTRL+C to stop.
+[11:50:44.401] [INFO] Official documentation reference: https://storybook.js.org/llms.txt
+[11:50:44.402] [INFO] To finalize setting up with AI, paste this prompt to your AI agent:
+
+[38;2;255;71;133mRun `npx storybook ai setup` and follow its instructions precisely.[39m

@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum InterventionType {
+  EMAIL
+  MEETING
+  ACADEMIC_ALERT
+  COUNSELING_REFERRAL
+  PEER_TUTORING
+  CHECK_IN
+  OTHER
+}
+
+enum InterventionStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum LMSProvider {
+  CANVAS
+  GOOGLE_CLASSROOM
+  MOODLE
+  MOCK
+}
+
+enum ConsentScope {
+  LMS_DATA
+  CHAT_LOGS
+  ACADEMIC_RECORDS
+  ANALYTICS
+}
+
+model Student {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  name          String?
+  externalId    String?  @unique
+  encryptedData String?
+
+  lmsAccounts    LMSAccount[]
+  activities     LMSActivity[]
+  riskScores     RiskScore[]
+  chatMessages   ChatMessage[]
+  interventions  Intervention[]
+  consentSettings ConsentSetting[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([externalId])
+  @@map("students")
+}
+
+model LMSAccount {
+  id         String      @id @default(cuid())
+  studentId  String
+  provider   LMSProvider
+  providerId String?
+  accessToken String?
+  refreshToken String?
+  expiresAt  DateTime?
+  enabled    Boolean     @default(true)
+
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, provider])
+  @@index([provider])
+  @@map("lms_accounts")
+}
+
+model LMSActivity {
+  id          String   @id @default(cuid())
+  externalId  String?
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  type      String
+  title     String
+  description String?
+  courseId   String?
+  courseName String?
+  score     Float?
+  maxScore  Float?
+  url       String?
+  metadata  Json?
+  timestamp DateTime
+
+  createdAt DateTime @default(now())
+
+  @@index([studentId, timestamp(sort: Desc)])
+  @@index([studentId, type])
+  @@index([courseId])
+  @@index([timestamp(sort: Desc)])
+  @@map("lms_activities")
+}
+
+model RiskScore {
+  id          String    @id @default(cuid())
+  studentId   String
+  student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  level       RiskLevel
+  score       Float
+  factors     Json?
+  metadata    Json?
+
+  computedAt  DateTime @default(now())
+
+  @@index([studentId, computedAt(sort: Desc)])
+  @@index([computedAt(sort: Desc)])
+  @@index([level])
+  @@map("risk_scores")
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  role      String
+  content   String
+  encrypted Boolean  @default(false)
+  metadata  Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([studentId, createdAt(sort: Desc)])
+  @@map("chat_messages")
+}
+
+model Intervention {
+  id        String              @id @default(cuid())
+  studentId String
+  student   Student             @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  type      InterventionType
+  status    InterventionStatus @default(PENDING)
+  title     String
+  note      String?
+  assignedTo String?
+  dueDate   DateTime?
+  completedAt DateTime?
+  outcome   String?
+  metadata  Json?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([studentId, status])
+  @@index([status])
+  @@index([type])
+  @@map("interventions")
+}
+
+model ConsentSetting {
+  id        String        @id @default(cuid())
+  studentId String
+  student   Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  scope     ConsentScope
+  granted   Boolean       @default(false)
+  grantedAt DateTime?
+  revokedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, scope])
+  @@map("consent_settings")
+}

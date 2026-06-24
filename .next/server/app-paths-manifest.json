@@ -1,0 +1,15 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/admin/risk-scores/route": "app/api/admin/risk-scores/route.js",
+  "/api/lms/assignments/route": "app/api/lms/assignments/route.js",
+  "/api/lms/activities/route": "app/api/lms/activities/route.js",
+  "/api/admin/students/route": "app/api/admin/students/route.js",
+  "/admin/page": "app/admin/page.js",
+  "/api/admin/students/[id]/route": "app/api/admin/students/[id]/route.js",
+  "/api/risk/route": "app/api/risk/route.js",
+  "/risk-dashboard/page": "app/risk-dashboard/page.js",
+  "/page": "app/page.js",
+  "/dashboard/page": "app/dashboard/page.js",
+  "/auth/login/page": "app/auth/login/page.js"
+}

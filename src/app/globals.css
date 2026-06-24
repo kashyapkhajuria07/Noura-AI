@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    @apply bg-paper text-ink font-sans antialiased;
+  }
+
+  ::selection {
+    @apply bg-ink text-paper;
+  }
+}
+
+@layer components {
+  .brutal-border {
+    @apply border-brutal border-ink;
+  }
+
+  .brutal-border-b {
+    @apply border-b border-brutal border-ink;
+  }
+
+  .brutal-shadow {
+    @apply shadow-brutal;
+  }
+
+  .brutal-shadow-sm {
+    @apply shadow-brutal-sm;
+  }
+
+  .brutal-container {
+    @apply mx-auto w-full max-w-7xl px-gutter;
+  }
+
+  .grid-overlay {
+    @apply pointer-events-none fixed inset-0 z-50;
+    background-image:
+      linear-gradient(to right, rgba(10, 10, 10, 0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(10, 10, 10, 0.04) 1px, transparent 1px);
+    background-size: 1rem 1rem;
+  }
+
+  .skeleton-pulse {
+    @apply relative overflow-hidden rounded-brutal-sm bg-ink-100;
+  }
+
+  .skeleton-pulse::after {
+    @apply absolute inset-0;
+    content: '';
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(250, 250, 249, 0.4),
+      transparent
+    );
+    background-size: 200% 100%;
+    animation: skeleton 1.5s ease-in-out infinite;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+}
