@@ -42,9 +42,7 @@ export async function assessAllStudentsDb(batchSize = 50): Promise<BatchResult> 
 
     if (students.length === 0) break;
 
-    const batchResults = await Promise.allSettled(
-      students.map((s) => assessStudentDb(s.id))
-    );
+    const batchResults = await Promise.allSettled(students.map((s) => assessStudentDb(s.id)));
 
     for (const result of batchResults) {
       if (result.status === 'fulfilled') {

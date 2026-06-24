@@ -53,7 +53,11 @@ describe('taskReducer', () => {
 
   it('UPDATE_TASK modifies fields across all columns', () => {
     const state0 = initState([makeTask({ id: 't1', status: 'todo', title: 'Old' })]);
-    const state = dispatch(state0, { type: 'UPDATE_TASK', id: 't1', updates: { title: 'New', priority: 'high' } });
+    const state = dispatch(state0, {
+      type: 'UPDATE_TASK',
+      id: 't1',
+      updates: { title: 'New', priority: 'high' },
+    });
     expect(state.tasks.todo[0].title).toBe('New');
     expect(state.tasks.todo[0].priority).toBe('high');
   });

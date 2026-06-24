@@ -1,4 +1,10 @@
-import type { JournalEntry, MoodEntry, MoodLevel, ReflectionData, CBTWorksheetEntry } from './types';
+import type {
+  JournalEntry,
+  MoodEntry,
+  MoodLevel,
+  ReflectionData,
+  CBTWorksheetEntry,
+} from './types';
 
 const STORAGE_KEY = 'burnout_reflection_data';
 const AUTOSAVE_DELAY = 2000;
@@ -8,7 +14,9 @@ function loadData(): ReflectionData {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) return JSON.parse(raw) as ReflectionData;
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return { journalEntries: [], moodEntries: [] };
 }
 
@@ -16,7 +24,9 @@ function saveData(data: ReflectionData): void {
   if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  } catch { /* storage full */ }
+  } catch {
+    /* storage full */
+  }
 }
 
 let _counter = 0;
@@ -60,7 +70,10 @@ export function createReflectionStore() {
     return entry;
   }
 
-  function updateJournalEntry(id: string, updates: Partial<Pick<JournalEntry, 'content' | 'mood' | 'cbtWorksheet'>>): JournalEntry | undefined {
+  function updateJournalEntry(
+    id: string,
+    updates: Partial<Pick<JournalEntry, 'content' | 'mood' | 'cbtWorksheet'>>
+  ): JournalEntry | undefined {
     const entry = data.journalEntries.find((e) => e.id === id);
     if (!entry) return undefined;
     if (updates.content !== undefined) entry.content = updates.content;
@@ -105,7 +118,11 @@ export function createReflectionStore() {
   }
 
   function getAllData(): ReflectionData {
-    return { ...data, journalEntries: [...data.journalEntries], moodEntries: [...data.moodEntries] };
+    return {
+      ...data,
+      journalEntries: [...data.journalEntries],
+      moodEntries: [...data.moodEntries],
+    };
   }
 
   function importData(imported: ReflectionData): void {

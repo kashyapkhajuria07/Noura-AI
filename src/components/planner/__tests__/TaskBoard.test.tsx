@@ -23,11 +23,7 @@ function makeTask(overrides: Partial<Task> = {}): Task {
 }
 
 function renderWithProvider(ui: React.ReactElement, initialTasks?: Task[]) {
-  return render(
-    <TaskProvider initialTasks={initialTasks}>
-      {ui}
-    </TaskProvider>
-  );
+  return render(<TaskProvider initialTasks={initialTasks}>{ui}</TaskProvider>);
 }
 
 describe('TaskBoard', () => {
@@ -73,7 +69,15 @@ describe('TaskBoard', () => {
 
   it('shows course name and due date on cards', () => {
     const dueDate = new Date(Date.now() + 2 * 86400000);
-    const tasks = [makeTask({ id: 't1', title: 'Essay', courseName: 'ENG 110', dueDate: dueDate.toISOString(), status: 'todo' })];
+    const tasks = [
+      makeTask({
+        id: 't1',
+        title: 'Essay',
+        courseName: 'ENG 110',
+        dueDate: dueDate.toISOString(),
+        status: 'todo',
+      }),
+    ];
     renderWithProvider(<TaskBoard />, tasks);
     expect(screen.getByText('ENG 110')).toBeDefined();
     expect(screen.getByText('2d left')).toBeDefined();
@@ -132,7 +136,15 @@ describe('CalendarView', () => {
 
   it('renders schedule blocks', () => {
     const tasks = [makeTask({ id: 't1', title: 'Study', dueDate: new Date().toISOString() })];
-    const schedule = [{ taskId: 't1', day: new Date().toISOString().split('T')[0], startHour: 10, endHour: 12, duration: 120 }];
+    const schedule = [
+      {
+        taskId: 't1',
+        day: new Date().toISOString().split('T')[0],
+        startHour: 10,
+        endHour: 12,
+        duration: 120,
+      },
+    ];
     render(<CalendarView tasks={tasks} schedule={schedule} />);
     expect(screen.getByText('10:00-12:00')).toBeDefined();
   });

@@ -1,6 +1,13 @@
 export type LMSProvider = 'canvas' | 'google_classroom' | 'moodle' | 'mock';
 
-export type ActivityType = 'assignment_submitted' | 'assignment_graded' | 'course_access' | 'discussion_post' | 'file_view' | 'quiz_taken' | 'module_completed';
+export type ActivityType =
+  | 'assignment_submitted'
+  | 'assignment_graded'
+  | 'course_access'
+  | 'discussion_post'
+  | 'file_view'
+  | 'quiz_taken'
+  | 'module_completed';
 
 export interface LMSActivity {
   id: string;

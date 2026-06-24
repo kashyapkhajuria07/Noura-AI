@@ -16,23 +16,26 @@ const variantStyles: Record<CardVariant, string> = {
   elevated: 'bg-paper shadow-brutal-hover border-brutal border-ink',
 };
 
-export function Card({ title, description, variant = 'default', children, className = '' }: CardProps) {
+export function Card({
+  title,
+  description,
+  variant = 'default',
+  children,
+  className = '',
+}: CardProps) {
   return (
     <div
       className={`
         rounded-brutal p-6 space-y-3
         transition-all duration-200 ease-out
-        hover:translate-x-0.5 hover:translate-y-0.5
+        hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-brutal-hover
+        focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-chrome
         ${variantStyles[variant]}
         ${className}
       `.trim()}
     >
-      {title && (
-        <h3 className="font-display text-subheading font-semibold">{title}</h3>
-      )}
-      {description && (
-        <p className="text-body-sm text-inherit opacity-80">{description}</p>
-      )}
+      {title && <h3 className="font-display text-subheading font-semibold">{title}</h3>}
+      {description && <p className="text-body-sm text-inherit opacity-80">{description}</p>}
       {children}
     </div>
   );

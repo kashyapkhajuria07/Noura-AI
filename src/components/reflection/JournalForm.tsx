@@ -10,7 +10,10 @@ interface JournalFormProps {
   selectedEntry: JournalEntry | null;
   onSelectEntry: (entry: JournalEntry | null) => void;
   onCreateEntry: (promptId: string, promptText: string) => JournalEntry;
-  onUpdateEntry: (id: string, updates: Partial<Pick<JournalEntry, 'content' | 'mood' | 'cbtWorksheet'>>) => JournalEntry | undefined;
+  onUpdateEntry: (
+    id: string,
+    updates: Partial<Pick<JournalEntry, 'content' | 'mood' | 'cbtWorksheet'>>
+  ) => JournalEntry | undefined;
   onDeleteEntry: (id: string) => void;
 }
 
@@ -59,19 +62,31 @@ export function JournalForm({
     }
   }, [selectedEntry]);
 
-  const scheduleAutosave = useCallback((id: string, updates: Partial<Pick<JournalEntry, 'content' | 'mood' | 'cbtWorksheet'>>) => {
-    if (autosaveRef.current) clearTimeout(autosaveRef.current);
-    autosaveRef.current = setTimeout(() => {
-      onUpdateEntry(id, updates);
-    }, 1500);
-  }, [onUpdateEntry]);
+  const scheduleAutosave = useCallback(
+    (id: string, updates: Partial<Pick<JournalEntry, 'content' | 'mood' | 'cbtWorksheet'>>) => {
+      if (autosaveRef.current) clearTimeout(autosaveRef.current);
+      autosaveRef.current = setTimeout(() => {
+        onUpdateEntry(id, updates);
+      }, 1500);
+    },
+    [onUpdateEntry]
+  );
 
-  const handleContentChange = useCallback((val: string) => {
-    setContent(val);
-    if (selectedEntry) {
-      scheduleAutosave(selectedEntry.id, { content: val, mood: selectedMood ?? undefined, cbtWorksheet: showCBT ? { thought: cbtThought, evidenceAgainst: cbtEvidence, reframe: cbtReframe } : undefined });
-    }
-  }, [selectedEntry, scheduleAutosave, selectedMood, showCBT, cbtThought, cbtEvidence, cbtReframe]);
+  const handleContentChange = useCallback(
+    (val: string) => {
+      setContent(val);
+      if (selectedEntry) {
+        scheduleAutosave(selectedEntry.id, {
+          content: val,
+          mood: selectedMood ?? undefined,
+          cbtWorksheet: showCBT
+            ? { thought: cbtThought, evidenceAgainst: cbtEvidence, reframe: cbtReframe }
+            : undefined,
+        });
+      }
+    },
+    [selectedEntry, scheduleAutosave, selectedMood, showCBT, cbtThought, cbtEvidence, cbtReframe]
+  );
 
   const handleCreate = useCallback(() => {
     if (!selectedPromptId) return;
@@ -83,7 +98,11 @@ export function JournalForm({
 
   const handleSaveCBT = useCallback(() => {
     if (!selectedEntry) return;
-    const ws: CBTWorksheetEntry = { thought: cbtThought, evidenceAgainst: cbtEvidence, reframe: cbtReframe };
+    const ws: CBTWorksheetEntry = {
+      thought: cbtThought,
+      evidenceAgainst: cbtEvidence,
+      reframe: cbtReframe,
+    };
     onUpdateEntry(selectedEntry.id, { cbtWorksheet: ws });
   }, [selectedEntry, cbtThought, cbtEvidence, cbtReframe, onUpdateEntry]);
 
@@ -161,9 +180,7 @@ export function JournalForm({
                   if (selectedEntry) onUpdateEntry(selectedEntry.id, { mood: m });
                 }}
                 className={`text-xl p-1 rounded-brutal-sm transition-all ${
-                  selectedMood === m
-                    ? 'bg-ink-100 ring-2 ring-ink scale-110'
-                    : 'hover:bg-ink-50'
+                  selectedMood === m ? 'bg-ink-100 ring-2 ring-ink scale-110' : 'hover:bg-ink-50'
                 }`}
                 title={MOOD_LABELS[m].label}
               >
@@ -183,7 +200,9 @@ export function JournalForm({
             {showCBT && (
               <div className="grid grid-cols-3 gap-4 border-brutal-sm border-ink rounded-brutal-sm p-4 bg-ink-50">
                 <div className="space-y-2">
-                  <p className="font-mono text-caption uppercase tracking-wider text-ink-400">Thought</p>
+                  <p className="font-mono text-caption uppercase tracking-wider text-ink-400">
+                    Thought
+                  </p>
                   <textarea
                     value={cbtThought}
                     onChange={(e) => setCbtThought(e.target.value)}
@@ -193,7 +212,9 @@ export function JournalForm({
                   />
                 </div>
                 <div className="space-y-2">
-                  <p className="font-mono text-caption uppercase tracking-wider text-ink-400">Evidence Against</p>
+                  <p className="font-mono text-caption uppercase tracking-wider text-ink-400">
+                    Evidence Against
+                  </p>
                   <textarea
                     value={cbtEvidence}
                     onChange={(e) => setCbtEvidence(e.target.value)}
@@ -203,7 +224,9 @@ export function JournalForm({
                   />
                 </div>
                 <div className="space-y-2">
-                  <p className="font-mono text-caption uppercase tracking-wider text-chrome">Reframe</p>
+                  <p className="font-mono text-caption uppercase tracking-wider text-chrome">
+                    Reframe
+                  </p>
                   <textarea
                     value={cbtReframe}
                     onChange={(e) => setCbtReframe(e.target.value)}

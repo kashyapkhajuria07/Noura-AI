@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { PrismaClient } from '@/generated/prisma';
+import { PrismaClient } from '@/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 
@@ -37,12 +37,12 @@ describe('schema validation', () => {
     }
   });
 
-  it.runIf(!!ctx)('connects to the database', async () => {
+  it('connects to the database', async () => {
     const result = await ctx!.prisma.$queryRaw`SELECT 1 as ok`;
     expect(result).toBeDefined();
   });
 
-  it.runIf(!!ctx)('has the expected table structure', async () => {
+  it('has the expected table structure', async () => {
     const tables = await ctx!.prisma.$queryRaw<{ table_name: string }[]>`
       SELECT table_name FROM information_schema.tables
       WHERE table_schema = 'public'
@@ -58,7 +58,7 @@ describe('schema validation', () => {
     expect(names).toContain('consent_settings');
   });
 
-  it.runIf(!!ctx)('enforces foreign key constraints', async () => {
+  it('enforces foreign key constraints', async () => {
     await expect(
       ctx!.prisma.lMSActivity.create({
         data: {
@@ -71,7 +71,7 @@ describe('schema validation', () => {
     ).rejects.toThrow();
   });
 
-  it.runIf(!!ctx)('enforces unique email constraint', async () => {
+  it('enforces unique email constraint', async () => {
     const email = `unique-test-${Date.now()}@test.edu`;
     await ctx!.prisma.student.create({ data: { email, name: 'Test' } });
     await expect(
@@ -80,7 +80,7 @@ describe('schema validation', () => {
     await ctx!.prisma.student.delete({ where: { email } });
   });
 
-  it.runIf(!!ctx)('enforces unique student-provider on LMS accounts', async () => {
+  it('enforces unique student-provider on LMS accounts', async () => {
     const student = await ctx!.prisma.student.create({
       data: { email: `provider-test-${Date.now()}@test.edu`, name: 'Provider Test' },
     });
@@ -95,7 +95,7 @@ describe('schema validation', () => {
     await ctx!.prisma.student.delete({ where: { id: student.id } });
   });
 
-  it.runIf(!!ctx)('enforces unique student-scope on consent settings', async () => {
+  it('enforces unique student-scope on consent settings', async () => {
     const student = await ctx!.prisma.student.create({
       data: { email: `consent-test-${Date.now()}@test.edu`, name: 'Consent Test' },
     });
@@ -110,7 +110,7 @@ describe('schema validation', () => {
     await ctx!.prisma.student.delete({ where: { id: student.id } });
   });
 
-  it.runIf(!!ctx)('cascades delete on student', async () => {
+  it('cascades delete on student', async () => {
     const student = await ctx!.prisma.student.create({
       data: { email: `cascade-test-${Date.now()}@test.edu`, name: 'Cascade' },
     });

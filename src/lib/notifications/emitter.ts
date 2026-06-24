@@ -2,7 +2,9 @@ import type { Notification, NotificationType } from './types';
 
 const WS_SERVER = process.env.WS_SERVER_URL || 'http://localhost:3001';
 
-export async function emitNotification(notification: Omit<Notification, 'id' | 'timestamp'>): Promise<void> {
+export async function emitNotification(
+  notification: Omit<Notification, 'id' | 'timestamp'>
+): Promise<void> {
   try {
     const res = await fetch(`${WS_SERVER}/emit`, {
       method: 'POST',
@@ -27,9 +29,10 @@ export async function emitRiskNotification(
 
   const type: NotificationType = tier === 'red' ? 'risk_red' : 'risk_amber';
 
-  const ruleSummary = triggeredRules.length > 0
-    ? triggeredRules.map((r) => r.replace(/_/g, ' ')).join(', ')
-    : 'general risk indicators';
+  const ruleSummary =
+    triggeredRules.length > 0
+      ? triggeredRules.map((r) => r.replace(/_/g, ' ')).join(', ')
+      : 'general risk indicators';
 
   const messages: Record<string, { title: string; message: string }> = {
     amber: {

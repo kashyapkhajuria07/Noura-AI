@@ -66,9 +66,7 @@ export async function assessComposite(
   const compositeScore = Math.min(RULE_WEIGHT * normalizedRule + ML_WEIGHT * mlScore, 1.0);
   const tier = computeTier(compositeScore);
 
-  const triggeredRules = ruleAssessment.rules
-    .filter((r) => r.triggered)
-    .map((r) => r.rule);
+  const triggeredRules = ruleAssessment.rules.filter((r) => r.triggered).map((r) => r.rule);
 
   const timelineEntry: RiskTimelineEntry = {
     date: new Date().toISOString(),
@@ -147,9 +145,7 @@ export async function assessAllComposite(batchSize = 50): Promise<{
 
     if (students.length === 0) break;
 
-    const batchResults = await Promise.allSettled(
-      students.map((s) => assessComposite(s.id))
-    );
+    const batchResults = await Promise.allSettled(students.map((s) => assessComposite(s.id)));
 
     for (const result of batchResults) {
       if (result.status === 'fulfilled') {
@@ -174,16 +170,22 @@ export async function assessAllComposite(batchSize = 50): Promise<{
 
 export function getTierColor(tier: CompositeTier): string {
   switch (tier) {
-    case 'red': return 'bg-accent text-paper';
-    case 'amber': return 'bg-ink-300 text-ink';
-    default: return 'bg-chrome/50 text-ink-600';
+    case 'red':
+      return 'bg-accent text-paper';
+    case 'amber':
+      return 'bg-ink-300 text-ink';
+    default:
+      return 'bg-chrome/50 text-ink-600';
   }
 }
 
 export function getTierDot(tier: CompositeTier): string {
   switch (tier) {
-    case 'red': return 'bg-accent';
-    case 'amber': return 'bg-ink-300';
-    default: return 'bg-chrome';
+    case 'red':
+      return 'bg-accent';
+    case 'amber':
+      return 'bg-ink-300';
+    default:
+      return 'bg-chrome';
   }
 }

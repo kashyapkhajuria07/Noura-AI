@@ -2,7 +2,10 @@ import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 
 vi.mock('next-auth/react', () => ({
-  useSession: () => ({ data: { user: { id: 'test', name: 'Test', email: 'test@test.com' } }, status: 'authenticated' }),
+  useSession: () => ({
+    data: { user: { id: 'test', name: 'Test', email: 'test@test.com' } },
+    status: 'authenticated',
+  }),
   SessionProvider: ({ children }: any) => children,
   signOut: vi.fn(),
 }));
@@ -33,9 +36,7 @@ function createMockNotification(overrides: Partial<Notification> = {}): Notifica
 function Wrapper({ children }: { children: React.ReactNode }) {
   return (
     <ChatProvider>
-      <NotificationProvider>
-        {children}
-      </NotificationProvider>
+      <NotificationProvider>{children}</NotificationProvider>
     </ChatProvider>
   );
 }

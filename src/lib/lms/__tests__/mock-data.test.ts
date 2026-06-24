@@ -23,7 +23,15 @@ describe('generateMockData', () => {
     expect(data.activities.length).toBeGreaterThan(0);
     for (const act of data.activities) {
       expect(new Date(act.timestamp).getTime()).not.toBeNaN();
-      expect(['assignment_submitted', 'assignment_graded', 'course_access', 'discussion_post', 'file_view', 'quiz_taken', 'module_completed']).toContain(act.type);
+      expect([
+        'assignment_submitted',
+        'assignment_graded',
+        'course_access',
+        'discussion_post',
+        'file_view',
+        'quiz_taken',
+        'module_completed',
+      ]).toContain(act.type);
     }
   });
 

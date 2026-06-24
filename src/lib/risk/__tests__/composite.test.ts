@@ -132,16 +132,46 @@ describe('averageStressScores', () => {
   });
 
   it('averages multiple scores', () => {
-    const results = [
-      { stress_score: 0.8 },
-      { stress_score: 0.2 },
-      { stress_score: 0.5 },
-    ] as any;
+    const results = [{ stress_score: 0.8 }, { stress_score: 0.2 }, { stress_score: 0.5 }] as any;
     expect(averageStressScores(results)).toBeCloseTo(0.5, 5);
   });
 
   it('handles single result', () => {
     const results = [{ stress_score: 0.9 }] as any;
     expect(averageStressScores(results)).toBeCloseTo(0.9, 5);
+  });
+});
+
+describe('getTierColor', () => {
+  it('returns red styling for red tier', async () => {
+    const { getTierColor } = await import('../composite');
+    expect(getTierColor('red')).toContain('bg-accent');
+  });
+
+  it('returns amber styling for amber tier', async () => {
+    const { getTierColor } = await import('../composite');
+    expect(getTierColor('amber')).toContain('bg-ink-300');
+  });
+
+  it('returns green styling for green tier', async () => {
+    const { getTierColor } = await import('../composite');
+    expect(getTierColor('green')).toContain('bg-chrome');
+  });
+});
+
+describe('getTierDot', () => {
+  it('returns accent dot for red tier', async () => {
+    const { getTierDot } = await import('../composite');
+    expect(getTierDot('red')).toBe('bg-accent');
+  });
+
+  it('returns ink-300 dot for amber tier', async () => {
+    const { getTierDot } = await import('../composite');
+    expect(getTierDot('amber')).toBe('bg-ink-300');
+  });
+
+  it('returns chrome dot for green tier', async () => {
+    const { getTierDot } = await import('../composite');
+    expect(getTierDot('green')).toBe('bg-chrome');
   });
 });

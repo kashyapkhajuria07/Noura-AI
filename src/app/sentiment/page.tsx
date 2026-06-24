@@ -18,17 +18,23 @@ interface AnalyzeResult {
 
 function levelColor(level: string): string {
   switch (level) {
-    case 'HIGH': return 'bg-accent text-paper';
-    case 'MODERATE': return 'bg-ink-300 text-ink';
-    default: return 'bg-chrome/50 text-ink-600';
+    case 'HIGH':
+      return 'bg-accent text-paper';
+    case 'MODERATE':
+      return 'bg-ink-300 text-ink';
+    default:
+      return 'bg-chrome/50 text-ink-600';
   }
 }
 
 function levelBorder(level: string): string {
   switch (level) {
-    case 'HIGH': return 'border-accent shadow-brutal-accent';
-    case 'MODERATE': return 'border-ink-300';
-    default: return 'border-chrome';
+    case 'HIGH':
+      return 'border-accent shadow-brutal-accent';
+    case 'MODERATE':
+      return 'border-ink-300';
+    default:
+      return 'border-chrome';
   }
 }
 
@@ -39,7 +45,9 @@ function ResultCard({ result }: { result: AnalyzeResult }) {
         className={`p-6 border-brutal border-ink rounded-brutal shadow-brutal-sm ${levelBorder(result.level)} space-y-4`}
       >
         <div className="flex items-center gap-3">
-          <div className={`flex-1 p-3 border-brutal border-ink rounded-brutal-sm ${levelColor(result.level)}`}>
+          <div
+            className={`flex-1 p-3 border-brutal border-ink rounded-brutal-sm ${levelColor(result.level)}`}
+          >
             <p className="font-mono text-caption uppercase tracking-wider">Stress Level</p>
             <p className="font-display text-display-sm font-bold">{result.level}</p>
           </div>
@@ -67,7 +75,9 @@ function ResultCard({ result }: { result: AnalyzeResult }) {
               style={{ width: `${result.probabilities.negative * 100}%` }}
             >
               <span className="font-mono text-caption text-paper">
-                {result.probabilities.negative > 0.1 ? `${(result.probabilities.negative * 100).toFixed(0)}%` : ''}
+                {result.probabilities.negative > 0.1
+                  ? `${(result.probabilities.negative * 100).toFixed(0)}%`
+                  : ''}
               </span>
             </div>
             <div
@@ -75,7 +85,9 @@ function ResultCard({ result }: { result: AnalyzeResult }) {
               style={{ width: `${result.probabilities.positive * 100}%` }}
             >
               <span className="font-mono text-caption text-ink">
-                {result.probabilities.positive > 0.1 ? `${(result.probabilities.positive * 100).toFixed(0)}%` : ''}
+                {result.probabilities.positive > 0.1
+                  ? `${(result.probabilities.positive * 100).toFixed(0)}%`
+                  : ''}
               </span>
             </div>
           </div>
@@ -175,7 +187,11 @@ export default function SentimentPage() {
 
             {result && (
               <button
-                onClick={() => { setInput(''); setResult(null); setError(null); }}
+                onClick={() => {
+                  setInput('');
+                  setResult(null);
+                  setError(null);
+                }}
                 className="font-mono text-caption text-ink-400 hover:text-accent border-b border-ink-200 hover:border-accent transition-colors"
               >
                 Clear

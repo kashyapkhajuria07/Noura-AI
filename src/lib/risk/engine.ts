@@ -3,8 +3,8 @@ import type { RuleThresholds, RiskAssessment } from './types';
 import { DEFAULT_THRESHOLDS } from './types';
 
 const RULE_WEIGHTS: Record<string, number> = {
-  engagement_drop: 0.30,
-  late_night: 0.20,
+  engagement_drop: 0.3,
+  late_night: 0.2,
   assignment_churn: 0.25,
   participation_gap: 0.25,
 };
@@ -43,9 +43,7 @@ export class RuleEngine {
       totalWeight += weight;
     }
 
-    const overallScore = totalWeight > 0
-      ? Math.round(totalWeightedScore / totalWeight)
-      : 0;
+    const overallScore = totalWeight > 0 ? Math.round(totalWeightedScore / totalWeight) : 0;
 
     const level = calculateLevel(overallScore);
 

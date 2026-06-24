@@ -8,10 +8,16 @@ const storage = new Map<string, string>();
 
 vi.stubGlobal('localStorage', {
   getItem: (key: string) => storage.get(key) ?? null,
-  setItem: (key: string, val: string) => { storage.set(key, val); },
-  removeItem: (key: string) => { storage.delete(key); },
+  setItem: (key: string, val: string) => {
+    storage.set(key, val);
+  },
+  removeItem: (key: string) => {
+    storage.delete(key);
+  },
   clear: () => storage.clear(),
-  get length() { return storage.size; },
+  get length() {
+    return storage.size;
+  },
   key: (i: number) => [...storage.keys()][i] ?? null,
 });
 
@@ -23,11 +29,17 @@ beforeEach(() => {
 
 const mockData: ReflectionData = {
   journalEntries: [
-    { id: 'j1', promptId: 'p01', promptText: 'Prompt', content: 'My journal entry', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), mood: 4 },
+    {
+      id: 'j1',
+      promptId: 'p01',
+      promptText: 'Prompt',
+      content: 'My journal entry',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      mood: 4,
+    },
   ],
-  moodEntries: [
-    { id: 'm1', mood: 3, note: 'Neutral', timestamp: new Date().toISOString() },
-  ],
+  moodEntries: [{ id: 'm1', mood: 3, note: 'Neutral', timestamp: new Date().toISOString() }],
 };
 
 describe('backup', () => {
@@ -87,7 +99,10 @@ describe('backup', () => {
   });
 
   it('handles corrupted backup gracefully', () => {
-    localStorage.setItem(BACKUP_KEY, JSON.stringify({ encrypted: 'invalid:bad:data', timestamp: new Date().toISOString() }));
+    localStorage.setItem(
+      BACKUP_KEY,
+      JSON.stringify({ encrypted: 'invalid:bad:data', timestamp: new Date().toISOString() })
+    );
     const restored = restoreFromBackup();
     expect(restored).toBeNull();
   });

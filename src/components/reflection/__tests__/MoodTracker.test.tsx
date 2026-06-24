@@ -7,8 +7,18 @@ import type { MoodEntry } from '@/lib/reflection/types';
 afterEach(cleanup);
 
 const mockEntries: MoodEntry[] = [
-  { id: 'm1', mood: 5, note: 'Great day', timestamp: new Date(Date.now() - 86400000).toISOString() },
-  { id: 'm2', mood: 2, note: 'Tired', timestamp: new Date(Date.now() - 2 * 86400000).toISOString() },
+  {
+    id: 'm1',
+    mood: 5,
+    note: 'Great day',
+    timestamp: new Date(Date.now() - 86400000).toISOString(),
+  },
+  {
+    id: 'm2',
+    mood: 2,
+    note: 'Tired',
+    timestamp: new Date(Date.now() - 2 * 86400000).toISOString(),
+  },
 ];
 
 describe('MoodTracker', () => {
@@ -70,7 +80,7 @@ describe('MoodChart', () => {
   it('renders with many entries', () => {
     const many: MoodEntry[] = Array.from({ length: 60 }, (_, i) => ({
       id: `m${i}`,
-      mood: (i % 5 + 1) as 1 | 2 | 3 | 4 | 5,
+      mood: ((i % 5) + 1) as 1 | 2 | 3 | 4 | 5,
       note: '',
       timestamp: new Date(Date.now() - i * 86400000).toISOString(),
     }));

@@ -7,8 +7,9 @@ import type {
   ChatMessage,
   Intervention,
   ConsentSetting,
+  AuditLog,
   Prisma,
-} from '@/generated/prisma';
+} from '@/generated/prisma/client';
 
 type StudentWithRelations = Prisma.StudentGetPayload<{
   include: { lmsAccounts: true; consentSettings: true };
@@ -42,7 +43,10 @@ export const studentQueries = {
     return prisma.student.create({ data });
   },
 
-  async update(id: string, data: Partial<Pick<Student, 'name' | 'email' | 'encryptedData'>>): Promise<Student> {
+  async update(
+    id: string,
+    data: Partial<Pick<Student, 'name' | 'email' | 'encryptedData'>>
+  ): Promise<Student> {
     return prisma.student.update({ where: { id }, data });
   },
 
@@ -152,16 +156,39 @@ export const consentQueries = {
     return prisma.consentSetting.findMany({ where: { studentId } });
   },
 
-  async upsert(
-    studentId: string,
-    scope: string,
-    granted: boolean
-  ): Promise<ConsentSetting> {
+  async upsert(studentId: string, scope: string, granted: boolean): Promise<ConsentSetting> {
     return prisma.consentSetting.upsert({
       where: { studentId_scope: { studentId, scope: scope as any } },
-      update: { granted, grantedAt: granted ? new Date() : undefined, revokedAt: granted ? undefined : new Date() },
-      create: { studentId, scope: scope as any, granted, grantedAt: granted ? new Date() : undefined },
+      update: {
+        granted,
+        grantedAt: granted ? new Date() : undefined,
+        revokedAt: granted ? undefined : new Date(),
+      },
+      create: {
+        studentId,
+        scope: scope as any,
+        granted,
+        grantedAt: granted ? new Date() : undefined,
+      },
     });
+  },
+};
+
+export const auditLogQueries = {
+  async findByStudent(studentId: string, limit = 50): Promise<AuditLog[]> {
+    return prisma.auditLog.findMany({
+      where: { studentId },
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+    });
+  },
+
+  async create(data: Prisma.AuditLogCreateInput): Promise<AuditLog> {
+    return prisma.auditLog.create({ data });
+  },
+
+  async countByStudent(studentId: string): Promise<number> {
+    return prisma.auditLog.count({ where: { studentId } });
   },
 };
 

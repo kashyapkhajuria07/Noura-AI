@@ -6,10 +6,16 @@ const storage = new Map<string, string>();
 
 vi.stubGlobal('localStorage', {
   getItem: (key: string) => storage.get(key) ?? null,
-  setItem: (key: string, val: string) => { storage.set(key, val); },
-  removeItem: (key: string) => { storage.delete(key); },
+  setItem: (key: string, val: string) => {
+    storage.set(key, val);
+  },
+  removeItem: (key: string) => {
+    storage.delete(key);
+  },
   clear: () => storage.clear(),
-  get length() { return storage.size; },
+  get length() {
+    return storage.size;
+  },
   key: (i: number) => [...storage.keys()][i] ?? null,
 });
 
@@ -76,10 +82,22 @@ describe('createReflectionStore', () => {
   });
 
   it('loads from localStorage on creation', () => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      journalEntries: [{ id: 'restored', promptId: 'p01', promptText: 'Prompt', content: 'From storage', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }],
-      moodEntries: [{ id: 'm1', mood: 5, note: 'Great!', timestamp: new Date().toISOString() }],
-    }));
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        journalEntries: [
+          {
+            id: 'restored',
+            promptId: 'p01',
+            promptText: 'Prompt',
+            content: 'From storage',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          },
+        ],
+        moodEntries: [{ id: 'm1', mood: 5, note: 'Great!', timestamp: new Date().toISOString() }],
+      })
+    );
 
     const store = createReflectionStore();
     expect(store.getJournalEntries()).toHaveLength(1);
@@ -119,7 +137,16 @@ describe('createReflectionStore', () => {
   it('imports data', () => {
     const store = createReflectionStore();
     store.importData({
-      journalEntries: [{ id: 'imp', promptId: 'p01', promptText: 'Prompt', content: 'Imported', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }],
+      journalEntries: [
+        {
+          id: 'imp',
+          promptId: 'p01',
+          promptText: 'Prompt',
+          content: 'Imported',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ],
       moodEntries: [],
     });
     expect(store.getJournalEntries()).toHaveLength(1);

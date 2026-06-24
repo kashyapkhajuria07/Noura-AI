@@ -6,8 +6,12 @@ beforeEach(() => {
   Object.keys(mockStorage).forEach((k) => delete mockStorage[k]);
   vi.stubGlobal('localStorage', {
     getItem: (key: string) => mockStorage[key] ?? null,
-    setItem: (key: string, val: string) => { mockStorage[key] = val; },
-    removeItem: (key: string) => { delete mockStorage[key]; },
+    setItem: (key: string, val: string) => {
+      mockStorage[key] = val;
+    },
+    removeItem: (key: string) => {
+      delete mockStorage[key];
+    },
   });
 });
 

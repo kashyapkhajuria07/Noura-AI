@@ -24,7 +24,10 @@ function renderMarkdown(text: string): string {
     .replace(/>/g, '&gt;')
     .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
     .replace(/\*(.+?)\*/g, '<em>$1</em>')
-    .replace(/`(.+?)`/g, '<code class="bg-ink-100 px-1 rounded-brutal-sm font-mono text-caption">$1</code>')
+    .replace(
+      /`(.+?)`/g,
+      '<code class="bg-ink-100 px-1 rounded-brutal-sm font-mono text-caption">$1</code>'
+    )
     .replace(/\n/g, '<br/>');
 
   html = html.replace(/```(\w*)\n?([\s\S]*?)```/g, (_, lang, code) => {
@@ -37,17 +40,15 @@ function renderMarkdown(text: string): string {
   return html;
 }
 
-function TypingDots() {
-  return (
-    <div className="flex items-center gap-1.5 px-4 py-3">
-      <span className="w-2 h-2 bg-ink-300 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-      <span className="w-2 h-2 bg-ink-300 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-      <span className="w-2 h-2 bg-ink-300 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-    </div>
-  );
-}
+import { TypingDots } from '@/components/TypingDots';
 
-export function ChatModal({ onClose, initialMessage }: { onClose: () => void; initialMessage?: string }) {
+export function ChatModal({
+  onClose,
+  initialMessage,
+}: {
+  onClose: () => void;
+  initialMessage?: string;
+}) {
   const { data: session } = useSession();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -88,46 +89,49 @@ export function ChatModal({ onClose, initialMessage }: { onClose: () => void; in
     } catch {}
   }
 
-  const sendMessage = useCallback(async (text: string) => {
-    if (!text.trim() || loading) return;
-    setLoading(true);
-    setError(null);
-    setInput('');
-    setQuickReplies([]);
+  const sendMessage = useCallback(
+    async (text: string) => {
+      if (!text.trim() || loading) return;
+      setLoading(true);
+      setError(null);
+      setInput('');
+      setQuickReplies([]);
 
-    const optimisticUser: ChatMessage = {
-      id: `opt-${Date.now()}`,
-      content: text.trim(),
-      role: 'user',
-      createdAt: new Date().toISOString(),
-    };
-    setMessages((prev) => [...prev, optimisticUser]);
+      const optimisticUser: ChatMessage = {
+        id: `opt-${Date.now()}`,
+        content: text.trim(),
+        role: 'user',
+        createdAt: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, optimisticUser]);
 
-    try {
-      const history = messages.map((m) => ({ role: m.role, content: m.content }));
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text.trim(), history }),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      setQuickReplies(data.data.quickReplies ?? []);
-      setMessages((prev) =>
-        prev
-          .filter((m) => m.id !== optimisticUser.id)
-          .concat([
-            { ...data.data.user, id: data.data.user.id },
-            { ...data.data.bot, id: data.data.bot.id },
-          ])
-      );
-    } catch (e: any) {
-      setError(e.message);
-      setMessages((prev) => prev.filter((m) => m.id !== optimisticUser.id));
-    } finally {
-      setLoading(false);
-    }
-  }, [messages, loading]);
+      try {
+        const history = messages.map((m) => ({ role: m.role, content: m.content }));
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text.trim(), history }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        setQuickReplies(data.data.quickReplies ?? []);
+        setMessages((prev) =>
+          prev
+            .filter((m) => m.id !== optimisticUser.id)
+            .concat([
+              { ...data.data.user, id: data.data.user.id },
+              { ...data.data.bot, id: data.data.bot.id },
+            ])
+        );
+      } catch (e: any) {
+        setError(e.message);
+        setMessages((prev) => prev.filter((m) => m.id !== optimisticUser.id));
+      } finally {
+        setLoading(false);
+      }
+    },
+    [messages, loading]
+  );
 
   async function handleSend() {
     if (!input.trim()) return;
@@ -180,8 +184,13 @@ export function ChatModal({ onClose, initialMessage }: { onClose: () => void; in
           )}
 
           {messages.map((msg) => (
-            <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`max-w-[80%] space-y-1 ${msg.role === 'user' ? 'order-1' : 'order-1'}`}>
+            <div
+              key={msg.id}
+              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`max-w-[80%] space-y-1 ${msg.role === 'user' ? 'order-1' : 'order-1'}`}
+              >
                 <div
                   className={`px-4 py-2.5 border-brutal border-ink ${
                     msg.role === 'user'
@@ -200,8 +209,13 @@ export function ChatModal({ onClose, initialMessage }: { onClose: () => void; in
                     </span>
                   )}
                 </div>
-                <p className={`font-mono text-caption text-ink-300 px-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}>
-                  {new Date(msg.createdAt).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}
+                <p
+                  className={`font-mono text-caption text-ink-300 px-1 ${msg.role === 'user' ? 'text-right' : 'text-left'}`}
+                >
+                  {new Date(msg.createdAt).toLocaleTimeString(undefined, {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
                 </p>
               </div>
             </div>

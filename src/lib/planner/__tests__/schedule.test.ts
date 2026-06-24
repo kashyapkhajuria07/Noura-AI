@@ -75,21 +75,17 @@ describe('generateSchedule', () => {
   });
 
   it('assigns earlier tasks to earlier days', () => {
-    const tasks = [
-      makeTask('early', 1),
-      makeTask('late', 10),
-    ];
+    const tasks = [makeTask('early', 1), makeTask('late', 10)];
     const windows = Array.from({ length: 24 }, (_, i) => ({ hour: i, count: i === 14 ? 5 : 0 }));
     const schedule = generateSchedule(tasks, windows);
     expect(schedule).toHaveLength(2);
-    expect(new Date(schedule[0].day).getTime()).toBeLessThanOrEqual(new Date(schedule[1].day).getTime());
+    expect(new Date(schedule[0].day).getTime()).toBeLessThanOrEqual(
+      new Date(schedule[1].day).getTime()
+    );
   });
 
   it('excludes done tasks from schedule', () => {
-    const tasks = [
-      makeTask('todo1', 3),
-      makeTask('done1', 2, 'done'),
-    ];
+    const tasks = [makeTask('todo1', 3), makeTask('done1', 2, 'done')];
     const windows = Array.from({ length: 24 }, (_, i) => ({ hour: i, count: 0 }));
     const schedule = generateSchedule(tasks, windows);
     expect(schedule).toHaveLength(1);
@@ -97,7 +93,10 @@ describe('generateSchedule', () => {
   });
 
   it('returns empty for no tasks', () => {
-    const schedule = generateSchedule([], Array.from({ length: 24 }, (_, i) => ({ hour: i, count: 0 })));
+    const schedule = generateSchedule(
+      [],
+      Array.from({ length: 24 }, (_, i) => ({ hour: i, count: 0 }))
+    );
     expect(schedule).toHaveLength(0);
   });
 });

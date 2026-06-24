@@ -9,7 +9,14 @@ import { createReflectionStore } from '@/lib/reflection/store';
 import { JournalForm } from '@/components/reflection/JournalForm';
 import { MoodTracker } from '@/components/reflection/MoodTracker';
 import { MoodChart } from '@/components/reflection/MoodChart';
-import { createEncryptedBackup, getBackupStatus, restoreFromBackup, uploadBackup, downloadBackup, type BackupStatus } from '@/lib/reflection/backup';
+import {
+  createEncryptedBackup,
+  getBackupStatus,
+  restoreFromBackup,
+  uploadBackup,
+  downloadBackup,
+  type BackupStatus,
+} from '@/lib/reflection/backup';
 import type { JournalEntry } from '@/lib/reflection/types';
 
 type Tab = 'journal' | 'mood' | 'progress';
@@ -21,7 +28,9 @@ export default function ReflectionPage() {
   const store = useMemo(() => createReflectionStore(), []);
 
   const [tab, setTab] = useState<Tab>('journal');
-  const [journalEntries, setJournalEntries] = useState<JournalEntry[]>(() => store.getJournalEntries());
+  const [journalEntries, setJournalEntries] = useState<JournalEntry[]>(() =>
+    store.getJournalEntries()
+  );
   const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
   const [moodEntries, setMoodEntries] = useState(() => store.getMoodEntries());
   const [backupStatus, setBackupStatus] = useState<BackupStatus>(() => getBackupStatus());
@@ -40,33 +49,51 @@ export default function ReflectionPage() {
     setJournalEntries([...store.getJournalEntries()]);
   }, [store]);
 
-  const handleCreateEntry = useCallback((promptId: string, promptText: string): JournalEntry => {
-    const entry = store.createJournalEntry(promptId, promptText);
-    refreshJournal();
-    return entry;
-  }, [store, refreshJournal]);
+  const handleCreateEntry = useCallback(
+    (promptId: string, promptText: string): JournalEntry => {
+      const entry = store.createJournalEntry(promptId, promptText);
+      refreshJournal();
+      return entry;
+    },
+    [store, refreshJournal]
+  );
 
-  const handleUpdateEntry = useCallback((id: string, updates: Partial<Pick<JournalEntry, 'content' | 'mood' | 'cbtWorksheet'>>): JournalEntry | undefined => {
-    const entry = store.updateJournalEntry(id, updates);
-    if (entry) refreshJournal();
-    return entry;
-  }, [store, refreshJournal]);
+  const handleUpdateEntry = useCallback(
+    (
+      id: string,
+      updates: Partial<Pick<JournalEntry, 'content' | 'mood' | 'cbtWorksheet'>>
+    ): JournalEntry | undefined => {
+      const entry = store.updateJournalEntry(id, updates);
+      if (entry) refreshJournal();
+      return entry;
+    },
+    [store, refreshJournal]
+  );
 
-  const handleDeleteEntry = useCallback((id: string) => {
-    store.deleteJournalEntry(id);
-    setSelectedEntry(null);
-    refreshJournal();
-  }, [store, refreshJournal]);
+  const handleDeleteEntry = useCallback(
+    (id: string) => {
+      store.deleteJournalEntry(id);
+      setSelectedEntry(null);
+      refreshJournal();
+    },
+    [store, refreshJournal]
+  );
 
-  const handleAddMood = useCallback((mood: Parameters<typeof store.addMoodEntry>[0], note: string) => {
-    store.addMoodEntry(mood, note);
-    refreshMoods();
-  }, [store, refreshMoods]);
+  const handleAddMood = useCallback(
+    (mood: Parameters<typeof store.addMoodEntry>[0], note: string) => {
+      store.addMoodEntry(mood, note);
+      refreshMoods();
+    },
+    [store, refreshMoods]
+  );
 
-  const handleDeleteMood = useCallback((id: string) => {
-    store.deleteMoodEntry(id);
-    refreshMoods();
-  }, [store, refreshMoods]);
+  const handleDeleteMood = useCallback(
+    (id: string) => {
+      store.deleteMoodEntry(id);
+      refreshMoods();
+    },
+    [store, refreshMoods]
+  );
 
   const handleBackup = useCallback(async () => {
     setBackupLoading(true);
@@ -141,16 +168,18 @@ export default function ReflectionPage() {
         </header>
 
         <div className="flex items-center gap-4 border-b-2 border-ink pb-2 animate-fade-in-up">
-          {([
+          {[
             { id: 'journal' as const, label: 'Journal' },
             { id: 'mood' as const, label: 'Mood Tracker' },
             { id: 'progress' as const, label: 'Progress' },
-          ]).map((t) => (
+          ].map((t) => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
               className={`font-display text-body-sm font-semibold pb-1 border-b-2 transition-colors ${
-                tab === t.id ? 'border-ink text-ink' : 'border-transparent text-ink-400 hover:text-ink'
+                tab === t.id
+                  ? 'border-ink text-ink'
+                  : 'border-transparent text-ink-400 hover:text-ink'
               }`}
             >
               {t.label}

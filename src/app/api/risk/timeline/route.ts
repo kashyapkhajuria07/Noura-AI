@@ -18,7 +18,9 @@ export async function GET(request: Request) {
   const student: any = await studentQueries.findById(studentId);
   if (!student) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
-  const timeline = (Array.isArray(student.riskTimeline) ? student.riskTimeline : []) as RiskTimelineEntry[];
+  const timeline = (
+    Array.isArray(student.riskTimeline) ? student.riskTimeline : []
+  ) as RiskTimelineEntry[];
 
   return NextResponse.json({
     data: {

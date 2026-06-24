@@ -76,12 +76,12 @@ class AnalyzeResponse(BaseModel):
 
 
 @app.post("/analyze", response_model=AnalyzeResponse)
-@LATENCY.time()
 async def analyze(request: AnalyzeRequest):
     inputs = AnalyzeRequest.validate_inputs(request)
     start = time.perf_counter()
 
-    results = analyzer.analyze(inputs)
+    with LATENCY.time():
+        results = analyzer.analyze(inputs)
 
     duration_ms = round((time.perf_counter() - start) * 1000, 2)
 

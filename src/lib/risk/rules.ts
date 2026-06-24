@@ -1,4 +1,4 @@
-import type { LMSActivity } from '@/generated/prisma';
+import type { LMSActivity } from '@/generated/prisma/client';
 import type { RuleThresholds, RuleResult, RuleName } from './types';
 
 function scoreToSeverity(score: number): number {
@@ -46,10 +46,7 @@ export function engagementDropRule(
   };
 }
 
-export function lateNightRule(
-  activities: LMSActivity[],
-  thresholds: RuleThresholds
-): RuleResult {
+export function lateNightRule(activities: LMSActivity[], thresholds: RuleThresholds): RuleResult {
   const now = new Date();
   const sorted = [...activities]
     .filter((a) => {
@@ -62,8 +59,7 @@ export function lateNightRule(
 
   for (const act of sorted) {
     const h = act.timestamp.getHours();
-    const isLateNight =
-      h >= thresholds.lateNightHourStart || h <= thresholds.lateNightHourEnd;
+    const isLateNight = h >= thresholds.lateNightHourStart || h <= thresholds.lateNightHourEnd;
     if (isLateNight) {
       const dateStr = act.timestamp.toISOString().split('T')[0];
       if (!nightSessions.includes(dateStr)) {
@@ -100,8 +96,7 @@ export function lateNightRule(
   }
 
   const triggered = maxConsecutive >= thresholds.lateNightConsecutiveDays;
-  const severity =
-    maxConsecutive <= 3 ? 1 : maxConsecutive <= 5 ? 2 : maxConsecutive <= 7 ? 3 : 4;
+  const severity = maxConsecutive <= 3 ? 1 : maxConsecutive <= 5 ? 2 : maxConsecutive <= 7 ? 3 : 4;
 
   return {
     rule: 'late_night' as RuleName,
@@ -123,9 +118,7 @@ export function assignmentChurnRule(
   const since = new Date(now - windowMs);
 
   const submissions = activities.filter(
-    (a) =>
-      a.type === 'assignment_submitted' &&
-      a.timestamp >= since
+    (a) => a.type === 'assignment_submitted' && a.timestamp >= since
   );
 
   const courseMap = new Map<string, number>();
@@ -155,9 +148,11 @@ export function assignmentChurnRule(
       ? `${totalSubmissions} submissions in ${thresholds.assignmentChurnWindowDays} days (threshold: ${thresholds.assignmentChurnCount}). High churn courses: ${highChurnCourses.join(', ') || 'none'}`
       : `${totalSubmissions} submissions in ${thresholds.assignmentChurnWindowDays} days (within threshold)`,
     severity: triggered
-      ? totalSubmissions > thresholds.assignmentChurnCount * 2 ? 3
-        : totalSubmissions > thresholds.assignmentChurnCount * 1.5 ? 2
-        : 1
+      ? totalSubmissions > thresholds.assignmentChurnCount * 2
+        ? 3
+        : totalSubmissions > thresholds.assignmentChurnCount * 1.5
+          ? 2
+          : 1
       : 0,
   };
 }
@@ -176,9 +171,7 @@ export function participationGapRule(
     };
   }
 
-  const sorted = [...activities].sort(
-    (a, b) => b.timestamp.getTime() - a.timestamp.getTime()
-  );
+  const sorted = [...activities].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
   const mostRecent = sorted[0].timestamp;
   const now = Date.now();
   const gapDays = (now - mostRecent.getTime()) / (1000 * 60 * 60 * 24);
@@ -195,9 +188,11 @@ export function participationGapRule(
       ? `${Math.round(gapDays)} days since last activity (threshold: ${thresholds.participationGapDays} days)`
       : `${Math.round(gapDays)} days since last activity (within threshold)`,
     severity: triggered
-      ? gapDays > thresholds.participationGapDays * 2 ? 4
-        : gapDays > thresholds.participationGapDays * 1.5 ? 3
-        : 2
+      ? gapDays > thresholds.participationGapDays * 2
+        ? 4
+        : gapDays > thresholds.participationGapDays * 1.5
+          ? 3
+          : 2
       : 0,
   };
 }

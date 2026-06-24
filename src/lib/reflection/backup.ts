@@ -23,7 +23,10 @@ export function getBackupStatus(): BackupStatus {
   }
 }
 
-export function createEncryptedBackup(data: ReflectionData): { encrypted: string; timestamp: string } {
+export function createEncryptedBackup(data: ReflectionData): {
+  encrypted: string;
+  timestamp: string;
+} {
   const json = JSON.stringify(data);
   const encrypted = encrypt(json);
   const timestamp = new Date().toISOString();
@@ -32,7 +35,9 @@ export function createEncryptedBackup(data: ReflectionData): { encrypted: string
   if (typeof window !== 'undefined') {
     try {
       localStorage.setItem(BACKUP_STORAGE_KEY, payload);
-    } catch { /* storage full */ }
+    } catch {
+      /* storage full */
+    }
   }
 
   return { encrypted, timestamp };

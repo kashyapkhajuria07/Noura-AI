@@ -8,11 +8,13 @@ declare module 'next-auth' {
       email?: string | null;
       image?: string | null;
       lms?: string;
+      role?: string | null;
     };
   }
 
   interface User {
     lms?: string;
+    role?: string;
   }
 }
 
@@ -21,5 +23,6 @@ declare module 'next-auth/jwt' {
     id: string;
     lms?: string;
     accessToken?: string;
+    role?: string | null;
   }
 }

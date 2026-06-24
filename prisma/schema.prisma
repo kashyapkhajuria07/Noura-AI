@@ -62,6 +62,10 @@ model Student {
   chatMessages   ChatMessage[]
   interventions  Intervention[]
   consentSettings ConsentSetting[]
+  auditLogs       AuditLog[]
+
+  consentCompleted Boolean  @default(false)
+  deletedAt        DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -196,4 +200,42 @@ model ConsentSetting {
 
   @@unique([studentId, scope])
   @@map("consent_settings")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  studentId String
+  student   Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  actorId   String
+  actorRole String
+  action    String
+  details   String?
+
+  createdAt DateTime @default(now())
+
+  @@index([studentId, createdAt(sort: Desc)])
+  @@index([actorId])
+  @@index([action])
+  @@map("audit_logs")
+}
+
+model ErrorLog {
+  id        String   @id @default(cuid())
+  level     String   @default("error")
+  message   String
+  stack     String?
+  context   Json?
+  route     String?
+  duration  Int?
+  userId    String?
+  userAgent String?
+  ip        String?
+
+  createdAt DateTime @default(now())
+
+  @@index([level])
+  @@index([createdAt(sort: Desc)])
+  @@index([route])
+  @@map("error_logs")
 }

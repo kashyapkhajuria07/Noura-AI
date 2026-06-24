@@ -15,6 +15,10 @@ const envSchema = z.object({
     .string()
     .default('true')
     .transform((v) => v === 'true'),
+  COUNSELOR_EMAIL: z.string().optional().default('counselor@burnout.app'),
+  COUNSELOR_PASSWORD: z.string().optional().default('counselor-dev'),
+  ADMIN_EMAIL: z.string().optional().default('admin@burnout.app'),
+  ADMIN_PASSWORD: z.string().optional().default('admin-dev'),
 });
 
 export type Env = z.infer<typeof envSchema>;

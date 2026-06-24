@@ -106,16 +106,24 @@ export function CalendarView({ tasks, schedule, onMonthChange }: CalendarViewPro
                 cell.isToday ? 'bg-chrome/5' : ''
               } ${cell.isPast ? 'opacity-50' : ''}`}
             >
-              <span className={`font-mono text-caption ${
-                cell.isToday ? 'text-chrome font-bold not-italic' : 'text-ink-500 italic'
-              }`}>
+              <span
+                className={`font-mono text-caption ${
+                  cell.isToday ? 'text-chrome font-bold not-italic' : 'text-ink-500 italic'
+                }`}
+              >
                 {cell.day}
               </span>
               {dayTasks.map((t) => (
                 <div key={t.id} className="flex items-center gap-1">
-                  <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
-                    t.priority === 'high' ? 'bg-accent' : t.priority === 'medium' ? 'bg-ink-300' : 'bg-ink-200'
-                  }`} />
+                  <div
+                    className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
+                      t.priority === 'high'
+                        ? 'bg-accent'
+                        : t.priority === 'medium'
+                          ? 'bg-ink-300'
+                          : 'bg-ink-200'
+                    }`}
+                  />
                   <span className="font-mono text-[10px] text-ink-600 truncate">{t.title}</span>
                 </div>
               ))}

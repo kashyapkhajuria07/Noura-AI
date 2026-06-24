@@ -39,39 +39,45 @@ export function TaskBoard({ onAddTask, onEditTask }: TaskBoardProps) {
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  const handleDragStart = useCallback((event: DragStartEvent) => {
-    const task = allTasks.find((t) => t.id === event.active.id);
-    if (task) setActiveTask(task);
-  }, [allTasks]);
+  const handleDragStart = useCallback(
+    (event: DragStartEvent) => {
+      const task = allTasks.find((t) => t.id === event.active.id);
+      if (task) setActiveTask(task);
+    },
+    [allTasks]
+  );
 
-  const handleDragEnd = useCallback((event: DragEndEvent) => {
-    setActiveTask(null);
-    const { active, over } = event;
-    if (!over) return;
-    const activeId = active.id as string;
-    const overId = over.id as string;
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      setActiveTask(null);
+      const { active, over } = event;
+      if (!over) return;
+      const activeId = active.id as string;
+      const overId = over.id as string;
 
-    const activeTask = allTasks.find((t) => t.id === activeId);
-    if (!activeTask) return;
+      const activeTask = allTasks.find((t) => t.id === activeId);
+      if (!activeTask) return;
 
-    let targetStatus: TaskStatus;
-    let targetIndex: number | undefined;
+      let targetStatus: TaskStatus;
+      let targetIndex: number | undefined;
 
-    const overTask = allTasks.find((t) => t.id === overId);
-    if (overTask) {
-      targetStatus = overTask.status;
-      const colTasks = tasks[targetStatus];
-      const overIdx = colTasks.findIndex((t) => t.id === overId);
-      targetIndex = overIdx >= 0 ? overIdx : undefined;
-    } else {
-      targetStatus = overId as TaskStatus;
-      targetIndex = undefined;
-    }
+      const overTask = allTasks.find((t) => t.id === overId);
+      if (overTask) {
+        targetStatus = overTask.status;
+        const colTasks = tasks[targetStatus];
+        const overIdx = colTasks.findIndex((t) => t.id === overId);
+        targetIndex = overIdx >= 0 ? overIdx : undefined;
+      } else {
+        targetStatus = overId as TaskStatus;
+        targetIndex = undefined;
+      }
 
-    if (activeTask.status !== targetStatus || targetIndex !== undefined) {
-      moveTask(activeId, targetStatus, targetIndex);
-    }
-  }, [allTasks, tasks, moveTask]);
+      if (activeTask.status !== targetStatus || targetIndex !== undefined) {
+        moveTask(activeId, targetStatus, targetIndex);
+      }
+    },
+    [allTasks, tasks, moveTask]
+  );
 
   return (
     <div className="space-y-4">

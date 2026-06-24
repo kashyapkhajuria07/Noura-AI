@@ -17,8 +17,14 @@ interface StudentDemo {
 function generateDemoData(): StudentDemo[] {
   const engine = new RuleEngine();
   const names = [
-    'Alex Chen', 'Maya Rodriguez', 'Jordan Smith', 'Taylor Wu',
-    'Sam Patel', 'Riley Johnson', 'Casey Kim', 'Jessica Lee',
+    'Alex Chen',
+    'Maya Rodriguez',
+    'Jordan Smith',
+    'Taylor Wu',
+    'Sam Patel',
+    'Riley Johnson',
+    'Casey Kim',
+    'Jessica Lee',
   ];
   return names.map((name, idx) => {
     const seed = idx * 7;
@@ -122,29 +128,31 @@ function generateDemoData(): StudentDemo[] {
 
 function levelColor(level: string): string {
   switch (level) {
-    case 'CRITICAL': return 'bg-accent text-paper';
-    case 'HIGH': return 'bg-accent/80 text-paper';
-    case 'MEDIUM': return 'bg-ink-300 text-ink';
-    default: return 'bg-ink-100 text-ink-600';
+    case 'CRITICAL':
+      return 'bg-accent text-paper';
+    case 'HIGH':
+      return 'bg-accent/80 text-paper';
+    case 'MEDIUM':
+      return 'bg-ink-300 text-ink';
+    default:
+      return 'bg-ink-100 text-ink-600';
   }
 }
 
 function levelDot(level: string): string {
   switch (level) {
-    case 'CRITICAL': return 'bg-accent';
-    case 'HIGH': return 'bg-accent';
-    case 'MEDIUM': return 'bg-ink-300';
-    default: return 'bg-ink-200';
+    case 'CRITICAL':
+      return 'bg-accent';
+    case 'HIGH':
+      return 'bg-accent';
+    case 'MEDIUM':
+      return 'bg-ink-300';
+    default:
+      return 'bg-ink-200';
   }
 }
 
-function RuleModal({
-  student,
-  onClose,
-}: {
-  student: StudentDemo;
-  onClose: () => void;
-}) {
+function RuleModal({ student, onClose }: { student: StudentDemo; onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/50 animate-fade-in">
       <div
@@ -167,7 +175,9 @@ function RuleModal({
 
         <div className="flex items-center gap-3 p-3 border-brutal border-ink rounded-brutal-sm">
           <div className={`w-3 h-3 rounded-full ${levelDot(student.assessment.level)}`} />
-          <span className={`font-mono text-caption px-2 py-0.5 rounded-brutal-sm ${levelColor(student.assessment.level)}`}>
+          <span
+            className={`font-mono text-caption px-2 py-0.5 rounded-brutal-sm ${levelColor(student.assessment.level)}`}
+          >
             {student.assessment.level}
           </span>
           <span className="font-mono text-body-sm text-ink-500">
@@ -182,10 +192,7 @@ function RuleModal({
           {student.assessment.rules
             .filter((r) => r.triggered)
             .map((r) => (
-              <div
-                key={r.rule}
-                className="p-3 border-b border-ink-200 space-y-1"
-              >
+              <div key={r.rule} className="p-3 border-b border-ink-200 space-y-1">
                 <div className="flex items-center justify-between">
                   <span className="font-display text-body-sm font-semibold">
                     {r.rule.replace(/_/g, ' ')}
@@ -209,7 +216,9 @@ function RuleModal({
           {student.assessment.rules.map((r) => (
             <div key={r.rule} className="flex items-center justify-between text-body-sm">
               <span>{r.rule.replace(/_/g, ' ')}</span>
-              <span className={`font-mono text-caption ${r.triggered ? 'text-accent' : 'text-ink-400'}`}>
+              <span
+                className={`font-mono text-caption ${r.triggered ? 'text-accent' : 'text-ink-400'}`}
+              >
                 {r.triggered ? `Triggered (${r.score})` : 'OK'}
               </span>
             </div>
@@ -291,18 +300,18 @@ export default function RiskDashboardPage() {
             >
               <div className="flex items-start justify-between">
                 <div className="min-w-0 flex-1">
-                  <p className="font-display text-body-sm font-semibold truncate">
-                    {student.name}
-                  </p>
-                  <p className="font-mono text-caption text-ink-400 truncate">
-                    {student.email}
-                  </p>
+                  <p className="font-display text-body-sm font-semibold truncate">{student.name}</p>
+                  <p className="font-mono text-caption text-ink-400 truncate">{student.email}</p>
                 </div>
-                <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ml-2 ${levelDot(student.assessment.level)}`} />
+                <div
+                  className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ml-2 ${levelDot(student.assessment.level)}`}
+                />
               </div>
 
               <div className="flex items-center gap-2">
-                <span className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${levelColor(student.assessment.level)}`}>
+                <span
+                  className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${levelColor(student.assessment.level)}`}
+                >
                   {student.assessment.level}
                 </span>
                 <span className="font-mono text-caption text-ink-400">

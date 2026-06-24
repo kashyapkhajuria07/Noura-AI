@@ -71,10 +71,17 @@ export function MoodTracker({ entries, onAddMood, onDeleteMood }: MoodTrackerPro
               <div key={e.id} className="flex items-center gap-3 p-2 border-b border-ink-100">
                 <span className="text-lg">{MOOD_LABELS[e.mood].emoji}</span>
                 <span className="font-mono text-caption text-ink-400 min-w-[80px]">
-                  {new Date(e.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  {new Date(e.timestamp).toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
                 </span>
                 {e.note && (
-                  <span className="font-mono text-caption text-ink-500 flex-1 truncate">{e.note}</span>
+                  <span className="font-mono text-caption text-ink-500 flex-1 truncate">
+                    {e.note}
+                  </span>
                 )}
                 <button
                   onClick={() => onDeleteMood(e.id)}

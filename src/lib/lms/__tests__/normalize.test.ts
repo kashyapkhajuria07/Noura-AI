@@ -171,13 +171,37 @@ describe('normalizeLMSData', () => {
   it('normalizes a full LMS response', () => {
     const raw = {
       courses: [
-        { id: 1, name: 'CS 301', code: 'CS301', term: 'Spring 2026', teacher: 'Dr. Chen', enrollment_count: 45 },
+        {
+          id: 1,
+          name: 'CS 301',
+          code: 'CS301',
+          term: 'Spring 2026',
+          teacher: 'Dr. Chen',
+          enrollment_count: 45,
+        },
       ],
       submissions: [
-        { id: 1, assignment_id: 1, submitted_at: '2026-06-20T10:00:00Z', score: 90, assignment_name: 'HW 1', course_id: 1, course_name: 'CS 301' },
+        {
+          id: 1,
+          assignment_id: 1,
+          submitted_at: '2026-06-20T10:00:00Z',
+          score: 90,
+          assignment_name: 'HW 1',
+          course_id: 1,
+          course_name: 'CS 301',
+        },
       ],
       assignments: [
-        { id: 1, name: 'HW 2', due_at: '2026-07-01T23:59:00Z', points_possible: 100, course_id: 1, course_name: 'CS 301', has_submitted_submissions: false, workflow_state: 'unsubmitted' },
+        {
+          id: 1,
+          name: 'HW 2',
+          due_at: '2026-07-01T23:59:00Z',
+          points_possible: 100,
+          course_id: 1,
+          course_name: 'CS 301',
+          has_submitted_submissions: false,
+          workflow_state: 'unsubmitted',
+        },
       ],
     };
 

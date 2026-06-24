@@ -17,8 +17,7 @@ const variantStyles: Record<ButtonVariant, string> = {
     'bg-paper text-ink hover:bg-ink-100 active:bg-ink-200 shadow-brutal hover:shadow-brutal-hover active:shadow-brutal-sm',
   accent:
     'bg-accent text-paper hover:bg-accent-dark active:bg-accent-dark shadow-brutal-accent hover:shadow-brutal-hover active:shadow-brutal-sm',
-  ghost:
-    'bg-transparent text-ink hover:bg-ink-100 active:bg-ink-200 shadow-none hover:shadow-none',
+  ghost: 'bg-transparent text-ink hover:bg-ink-100 active:bg-ink-200 shadow-none hover:shadow-none',
 };
 
 const sizeStyles: Record<ButtonSize, string> = {

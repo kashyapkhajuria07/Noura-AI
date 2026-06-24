@@ -46,7 +46,7 @@ export const Disabled: Story = {
   args: {
     label: 'Disabled',
     disabled: true,
-    placeholder: 'Can\'t touch this',
+    placeholder: "Can't touch this",
   },
 };
 

@@ -14,7 +14,10 @@ export function generateSchedule(tasks: Task[], windows: ActivityWindow[]): Sche
   const totalActivity = windows.reduce((s, w) => s + w.count, 0);
 
   if (totalActivity === 0) {
-    const timeBlocks = [{ start: 10, end: 12 }, { start: 14, end: 16 }];
+    const timeBlocks = [
+      { start: 10, end: 12 },
+      { start: 14, end: 16 },
+    ];
     const todoTasks = tasks
       .filter((t) => t.status !== 'done')
       .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
@@ -35,7 +38,10 @@ export function generateSchedule(tasks: Task[], windows: ActivityWindow[]): Sche
   }
 
   const sorted = [...windows].sort((a, b) => b.count - a.count);
-  const peakHours = sorted.slice(0, 4).map((w) => w.hour).sort((a, b) => a - b);
+  const peakHours = sorted
+    .slice(0, 4)
+    .map((w) => w.hour)
+    .sort((a, b) => a - b);
 
   const expanded = new Set<number>();
   for (const h of peakHours) {

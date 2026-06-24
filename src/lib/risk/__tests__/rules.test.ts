@@ -34,11 +34,13 @@ describe('engagementDropRule', () => {
   it('flags >30% drop in activity', () => {
     const now = Date.now();
     const activities = [
-      ...Array.from({ length: 20 }, (_, i) =>
-        makeActivity((14 * 24) - i) // earlier window
+      ...Array.from(
+        { length: 20 },
+        (_, i) => makeActivity(14 * 24 - i) // earlier window
       ),
-      ...Array.from({ length: 5 }, (_, i) =>
-        makeActivity(i) // recent window
+      ...Array.from(
+        { length: 5 },
+        (_, i) => makeActivity(i) // recent window
       ),
     ];
     const result = engagementDropRule(activities, T);
@@ -62,7 +64,7 @@ describe('engagementDropRule', () => {
 
   it('uses configurable threshold', () => {
     const activities = [
-      ...Array.from({ length: 10 }, (_, i) => makeActivity((14 * 24) - i)),
+      ...Array.from({ length: 10 }, (_, i) => makeActivity(14 * 24 - i)),
       ...Array.from({ length: 8 }, (_, i) => makeActivity(i)),
     ];
     const strict = { ...T, engagementDropPercent: 10 };
@@ -141,17 +143,13 @@ describe('lateNightRule', () => {
 
 describe('assignmentChurnRule', () => {
   it('flags >4 submissions within window', () => {
-    const activities = Array.from({ length: 6 }, (_, i) =>
-      makeActivity(i, 'assignment_submitted')
-    );
+    const activities = Array.from({ length: 6 }, (_, i) => makeActivity(i, 'assignment_submitted'));
     const result = assignmentChurnRule(activities, T);
     expect(result.triggered).toBe(true);
   });
 
   it('does not flag low submission count', () => {
-    const activities = Array.from({ length: 2 }, (_, i) =>
-      makeActivity(i, 'assignment_submitted')
-    );
+    const activities = Array.from({ length: 2 }, (_, i) => makeActivity(i, 'assignment_submitted'));
     const result = assignmentChurnRule(activities, T);
     expect(result.triggered).toBe(false);
   });
@@ -199,7 +197,7 @@ describe('participationGapRule', () => {
   it('uses the most recent activity', () => {
     const activities = [
       makeActivity(10 * 24), // 10 days ago
-      makeActivity(5 * 24),  // 5 days ago — should be used
+      makeActivity(5 * 24), // 5 days ago — should be used
     ];
     const result = participationGapRule(activities, T);
     expect(result.triggered).toBe(false);

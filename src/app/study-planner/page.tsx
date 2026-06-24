@@ -53,15 +53,17 @@ function PlannerInner() {
         const asgnData = await asgnRes.json();
         setActivities(actData.data ?? []);
         const assignments: LMSAssignment[] = asgnData.data ?? [];
-        syncFromLMS(assignments.map((a) => ({
-          id: a.id,
-          title: a.title,
-          courseName: a.courseName,
-          courseId: a.courseId,
-          dueDate: a.dueDate,
-          pointsPossible: a.pointsPossible,
-          description: a.description,
-        })));
+        syncFromLMS(
+          assignments.map((a) => ({
+            id: a.id,
+            title: a.title,
+            courseName: a.courseName,
+            courseId: a.courseId,
+            dueDate: a.dueDate,
+            pointsPossible: a.pointsPossible,
+            description: a.description,
+          }))
+        );
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Unknown error');
       } finally {
@@ -121,18 +123,19 @@ function PlannerInner() {
     <>
       <GridOverlay />
       <main className="brutal-container min-h-screen py-16 space-y-10">
-        <header className="flex items-start justify-between animate-fade-in">
+        <header className="flex flex-col xs:flex-row items-start justify-between gap-4 animate-fade-in">
           <div className="space-y-2">
             <p className="font-mono text-caption uppercase tracking-widest text-ink-400">
               Study Planner
             </p>
             <h1 className="font-display text-heading font-bold">Task Board &amp; Schedule</h1>
             <p className="text-body-sm text-ink-500">
-              {allTasks.length} task{allTasks.length !== 1 ? 's' : ''} &middot;{' '}
-              {tasks.todo.length} to do &middot; {tasks.in_progress.length} in progress &middot; {tasks.done.length} done
+              {allTasks.length} task{allTasks.length !== 1 ? 's' : ''} &middot; {tasks.todo.length}{' '}
+              to do &middot; {tasks.in_progress.length} in progress &middot; {tasks.done.length}{' '}
+              done
             </p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap flex-shrink-0">
             <button
               onClick={() => setShowPomodoro(true)}
               className="font-display text-body-sm font-semibold bg-paper text-ink border-brutal-sm border-ink rounded-brutal-sm shadow-brutal-sm px-4 py-2 hover:shadow-brutal transition-all active:translate-x-0.5 active:translate-y-0.5"
@@ -203,7 +206,9 @@ function PlannerInner() {
 
         {!schedule && activities.length === 0 && !loading && (
           <div className="border-brutal-sm border-dashed border-ink-200 rounded-brutal-sm p-8 text-center animate-fade-in">
-            <p className="font-display text-subheading font-semibold text-ink-400">No LMS data available</p>
+            <p className="font-display text-subheading font-semibold text-ink-400">
+              No LMS data available
+            </p>
             <p className="font-mono text-caption text-ink-300 mt-2">
               Connect your LMS account to auto-populate assignments and generate schedules.
             </p>
@@ -212,7 +217,10 @@ function PlannerInner() {
       </main>
 
       {showNewTask && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 backdrop-blur-sm animate-fade-in" onClick={() => setShowNewTask(false)}>
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 backdrop-blur-sm animate-fade-in"
+          onClick={() => setShowNewTask(false)}
+        >
           <div
             className="bg-paper border-brutal border-ink rounded-brutal shadow-brutal p-6 w-full max-w-sm mx-4 space-y-4"
             onClick={(e) => e.stopPropagation()}

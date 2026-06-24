@@ -84,7 +84,12 @@ describe('fallbackResponse', () => {
   it('returns default response for generic message', () => {
     const resp = fallbackResponse(makeMessages('Hi there'));
     expect(resp.content).toContain('step');
-    expect(resp.quickReplies).toEqual(['Help me plan', 'Breathing exercise', 'Talk to someone', 'Not now']);
+    expect(resp.quickReplies).toEqual([
+      'Help me plan',
+      'Breathing exercise',
+      'Talk to someone',
+      'Not now',
+    ]);
   });
 
   it('handles no user messages', () => {

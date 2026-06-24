@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
-import { PrismaClient } from '@/generated/prisma';
+import { PrismaClient } from '@/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 
@@ -67,7 +67,7 @@ describe('query performance', () => {
     }
   });
 
-  it.runIf(!!ctx)('fetches student by ID under 50ms', async () => {
+  it('fetches student by ID under 50ms', async () => {
     const start = performance.now();
     const student = await ctx!.prisma.student.findUnique({ where: { id: STUDENT_ID } });
     const duration = performance.now() - start;
@@ -75,7 +75,7 @@ describe('query performance', () => {
     expect(duration).toBeLessThan(50);
   });
 
-  it.runIf(!!ctx)('fetches recent activities under 50ms', async () => {
+  it('fetches recent activities under 50ms', async () => {
     const start = performance.now();
     const activities = await ctx!.prisma.lMSActivity.findMany({
       where: { studentId: STUDENT_ID },
@@ -87,7 +87,7 @@ describe('query performance', () => {
     expect(duration).toBeLessThan(50);
   });
 
-  it.runIf(!!ctx)('fetches risk score history under 50ms', async () => {
+  it('fetches risk score history under 50ms', async () => {
     const start = performance.now();
     const scores = await ctx!.prisma.riskScore.findMany({
       where: { studentId: STUDENT_ID },
@@ -99,9 +99,11 @@ describe('query performance', () => {
     expect(duration).toBeLessThan(50);
   });
 
-  it.runIf(!!ctx)('performs student lookup by email under 50ms', async () => {
+  it('performs student lookup by email under 50ms', async () => {
     const start = performance.now();
-    const student = await ctx!.prisma.student.findUnique({ where: { email: 'benchmark@test.edu' } });
+    const student = await ctx!.prisma.student.findUnique({
+      where: { email: 'benchmark@test.edu' },
+    });
     const duration = performance.now() - start;
     expect(student).not.toBeNull();
     expect(duration).toBeLessThan(50);

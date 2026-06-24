@@ -19,7 +19,15 @@ const teacherNames = [
   'Dr. Lisa Thompson',
 ];
 
-const actTypes = ['assignment_submitted', 'assignment_graded', 'course_access', 'discussion_post', 'file_view', 'quiz_taken', 'module_completed'] as const;
+const actTypes = [
+  'assignment_submitted',
+  'assignment_graded',
+  'course_access',
+  'discussion_post',
+  'file_view',
+  'quiz_taken',
+  'module_completed',
+] as const;
 
 function randomItem<T>(arr: readonly T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
@@ -44,7 +52,7 @@ const titles = [
   'Homework 4: Recursion Trees',
   'Quiz 3: Matrix Operations',
   'Essay Draft: Argumentative Analysis',
-  'Lab Report: Newton\'s Laws',
+  "Lab Report: Newton's Laws",
   'Reading Response: Industrial Revolution',
   'Chapter 5 Quiz: Neural Pathways',
   'Mitosis Lab Worksheet',
@@ -97,7 +105,13 @@ export function generateMockData(): NormalizedLMSData {
         submitted,
         graded,
         score: graded ? Math.floor(Math.random() * 100) : undefined,
-        status: (graded ? 'graded' : submitted ? 'submitted' : isOverdue ? 'missing' : 'assigned') as any,
+        status: (graded
+          ? 'graded'
+          : submitted
+            ? 'submitted'
+            : isOverdue
+              ? 'missing'
+              : 'assigned') as any,
         metadata: {},
       };
     });

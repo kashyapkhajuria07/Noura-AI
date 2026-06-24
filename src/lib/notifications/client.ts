@@ -46,12 +46,16 @@ export function disconnectSocket(): void {
 
 export function onNotification(fn: (n: Notification) => void): () => void {
   listeners.add(fn);
-  return () => { listeners.delete(fn); };
+  return () => {
+    listeners.delete(fn);
+  };
 }
 
 export function onConnectionChange(fn: (v: boolean) => void): () => void {
   connectedListeners.add(fn);
-  return () => { connectedListeners.delete(fn); };
+  return () => {
+    connectedListeners.delete(fn);
+  };
 }
 
 export function isConnected(): boolean {

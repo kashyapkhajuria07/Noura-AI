@@ -1,4 +1,5 @@
-import { PrismaClient } from '../src/generated/prisma';
+import 'dotenv/config';
+import { PrismaClient } from '../src/generated/prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import pg from 'pg';
 import { encrypt } from '../src/lib/db/encryption';

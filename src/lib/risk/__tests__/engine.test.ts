@@ -43,7 +43,10 @@ describe('RuleEngine', () => {
     const e = new RuleEngine();
     const r = e.assess([act(1)]);
     expect(r.rules.map((x) => x.rule)).toEqual([
-      'engagement_drop', 'late_night', 'assignment_churn', 'participation_gap',
+      'engagement_drop',
+      'late_night',
+      'assignment_churn',
+      'participation_gap',
     ]);
   });
 

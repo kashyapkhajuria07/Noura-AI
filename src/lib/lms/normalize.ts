@@ -1,4 +1,10 @@
-import type { LMSActivity, LMSAssignment, LMSCourse, NormalizedLMSData, LMSProvider } from './types';
+import type {
+  LMSActivity,
+  LMSAssignment,
+  LMSCourse,
+  NormalizedLMSData,
+  LMSProvider,
+} from './types';
 
 interface RawCanvasSubmission {
   id: number;
@@ -89,11 +95,12 @@ function googleAssignment(raw: any): LMSAssignment {
     pointsPossible: raw.maxPoints ?? 0,
     submitted: raw.submissionState === 'SUBMITTED' || raw.submissionState === 'RETURNED',
     graded: raw.submissionState === 'RETURNED' || raw.submissionState === 'GRADED',
-    status: raw.submissionState === 'RETURNED'
-      ? 'graded'
-      : raw.submissionState === 'SUBMITTED'
-        ? 'submitted'
-        : 'assigned',
+    status:
+      raw.submissionState === 'RETURNED'
+        ? 'graded'
+        : raw.submissionState === 'SUBMITTED'
+          ? 'submitted'
+          : 'assigned',
     metadata: { raw },
   };
 }
@@ -101,7 +108,12 @@ function googleAssignment(raw: any): LMSAssignment {
 function moodleActivity(raw: any): LMSActivity {
   return {
     id: `moodle-activity-${raw.id}`,
-    type: raw.modname === 'quiz' ? 'quiz_taken' : raw.modname === 'forum' ? 'discussion_post' : 'course_access',
+    type:
+      raw.modname === 'quiz'
+        ? 'quiz_taken'
+        : raw.modname === 'forum'
+          ? 'discussion_post'
+          : 'course_access',
     title: raw.name ?? 'Untitled',
     description: raw.description ?? '',
     courseId: String(raw.course ?? ''),
@@ -120,9 +132,7 @@ function moodleAssignment(raw: any): LMSAssignment {
     courseName: raw.courseName ?? '',
     title: raw.name ?? 'Untitled',
     description: raw.description ?? '',
-    dueDate: raw.duedate
-      ? new Date(raw.duedate * 1000).toISOString()
-      : new Date().toISOString(),
+    dueDate: raw.duedate ? new Date(raw.duedate * 1000).toISOString() : new Date().toISOString(),
     pointsPossible: raw.grade ?? 100,
     submitted: raw.submitted === true,
     graded: raw.graded === true,
@@ -144,40 +154,41 @@ const assignmentNormalizers: Record<string, (raw: any) => LMSAssignment> = {
 };
 
 export function normalizeActivity(raw: any, provider: LMSProvider): LMSActivity {
-  const fn = normalizers[provider] ?? ((r: any) => ({
-    id: `unknown-${r.id ?? Math.random()}`,
-    type: 'course_access' as const,
-    title: r.title ?? 'Unknown Activity',
-    description: '',
-    courseId: String(r.courseId ?? ''),
-    courseName: r.courseName ?? '',
-    timestamp: r.timestamp ?? new Date().toISOString(),
-    metadata: { raw: r },
-  }));
+  const fn =
+    normalizers[provider] ??
+    ((r: any) => ({
+      id: `unknown-${r.id ?? Math.random()}`,
+      type: 'course_access' as const,
+      title: r.title ?? 'Unknown Activity',
+      description: '',
+      courseId: String(r.courseId ?? ''),
+      courseName: r.courseName ?? '',
+      timestamp: r.timestamp ?? new Date().toISOString(),
+      metadata: { raw: r },
+    }));
   return fn(raw);
 }
 
 export function normalizeAssignment(raw: any, provider: LMSProvider): LMSAssignment {
-  const fn = assignmentNormalizers[provider] ?? ((r: any) => ({
-    id: `unknown-${r.id ?? Math.random()}`,
-    courseId: String(r.courseId ?? ''),
-    courseName: r.courseName ?? '',
-    title: r.title ?? 'Untitled',
-    description: '',
-    dueDate: r.dueDate ?? new Date().toISOString(),
-    pointsPossible: r.pointsPossible ?? 0,
-    submitted: false,
-    graded: false,
-    status: 'assigned' as const,
-    metadata: { raw: r },
-  }));
+  const fn =
+    assignmentNormalizers[provider] ??
+    ((r: any) => ({
+      id: `unknown-${r.id ?? Math.random()}`,
+      courseId: String(r.courseId ?? ''),
+      courseName: r.courseName ?? '',
+      title: r.title ?? 'Untitled',
+      description: '',
+      dueDate: r.dueDate ?? new Date().toISOString(),
+      pointsPossible: r.pointsPossible ?? 0,
+      submitted: false,
+      graded: false,
+      status: 'assigned' as const,
+      metadata: { raw: r },
+    }));
   return fn(raw);
 }
 
-export function normalizeLMSData(
-  raw: any,
-  provider: LMSProvider
-): NormalizedLMSData {
+export function normalizeLMSData(raw: any, provider: LMSProvider): NormalizedLMSData {
   const courses: LMSCourse[] = (raw.courses ?? []).map((c: any) => ({
     id: String(c.id),
     name: c.name ?? c.courseName ?? '',
@@ -188,8 +199,8 @@ export function normalizeLMSData(
     url: c.url ?? '',
   }));
 
-  const activities: LMSActivity[] = (raw.activities ?? raw.submissions ?? []).map(
-    (a: any) => normalizeActivity(a, provider)
+  const activities: LMSActivity[] = (raw.activities ?? raw.submissions ?? []).map((a: any) =>
+    normalizeActivity(a, provider)
   );
 
   const assignments: LMSAssignment[] = (raw.assignments ?? []).map((a: any) =>

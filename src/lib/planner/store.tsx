@@ -92,7 +92,17 @@ interface TaskContextValue {
   deleteTask: (id: string) => void;
   moveTask: (id: string, status: TaskStatus, index?: number) => void;
   reorder: (status: TaskStatus, ids: string[]) => void;
-  syncFromLMS: (assignments: { id: string; title: string; courseName: string; courseId: string; dueDate: string; pointsPossible?: number; description?: string }[]) => void;
+  syncFromLMS: (
+    assignments: {
+      id: string;
+      title: string;
+      courseName: string;
+      courseId: string;
+      dueDate: string;
+      pointsPossible?: number;
+      description?: string;
+    }[]
+  ) => void;
 }
 
 const TaskContext = createContext<TaskContextValue | null>(null);
@@ -102,7 +112,13 @@ function uid() {
   return `task-${Date.now()}-${++_counter}`;
 }
 
-export function TaskProvider({ children, initialTasks = [] }: { children: ReactNode; initialTasks?: Task[] }) {
+export function TaskProvider({
+  children,
+  initialTasks = [],
+}: {
+  children: ReactNode;
+  initialTasks?: Task[];
+}) {
   const [state, dispatch] = useReducer(taskReducer, { tasks: buildStatusMap(initialTasks) });
 
   const addTask = (task: Omit<Task, 'id' | 'createdAt'>) => {
@@ -128,7 +144,17 @@ export function TaskProvider({ children, initialTasks = [] }: { children: ReactN
     dispatch({ type: 'REORDER', status, ids });
   };
 
-  const syncFromLMS = (assignments: { id: string; title: string; courseName: string; courseId: string; dueDate: string; pointsPossible?: number; description?: string }[]) => {
+  const syncFromLMS = (
+    assignments: {
+      id: string;
+      title: string;
+      courseName: string;
+      courseId: string;
+      dueDate: string;
+      pointsPossible?: number;
+      description?: string;
+    }[]
+  ) => {
     const existing = new Set<string>();
     for (const list of Object.values(state.tasks)) {
       for (const t of list) {
@@ -158,7 +184,18 @@ export function TaskProvider({ children, initialTasks = [] }: { children: ReactN
   };
 
   return (
-    <TaskContext.Provider value={{ tasks: state.tasks, dispatch, addTask, updateTask, deleteTask, moveTask, reorder, syncFromLMS }}>
+    <TaskContext.Provider
+      value={{
+        tasks: state.tasks,
+        dispatch,
+        addTask,
+        updateTask,
+        deleteTask,
+        moveTask,
+        reorder,
+        syncFromLMS,
+      }}
+    >
       {children}
     </TaskContext.Provider>
   );

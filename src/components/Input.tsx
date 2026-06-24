@@ -15,10 +15,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="space-y-1.5">
         {label && (
-          <label
-            htmlFor={inputId}
-            className="block font-display text-body-sm font-semibold"
-          >
+          <label htmlFor={inputId} className="block font-display text-body-sm font-semibold">
             {label}
           </label>
         )}
@@ -37,9 +34,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           `.trim()}
           {...props}
         />
-        {error && (
-          <p className="font-mono text-caption text-accent">{error}</p>
-        )}
+        {error && <p className="font-mono text-caption text-accent">{error}</p>}
       </div>
     );
   }

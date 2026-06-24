@@ -35,24 +35,27 @@ export function getQuickReplies(context: string): string[] {
   if (lower.includes('plan') || lower.includes('schedule') || lower.includes('organize')) {
     return QUICK_REPLIES.planning;
   }
-  if (lower.includes('breath') || lower.includes('calm') || lower.includes('anxiet') || lower.includes('anxious') || lower.includes('stress')) {
+  if (
+    lower.includes('breath') ||
+    lower.includes('calm') ||
+    lower.includes('anxiet') ||
+    lower.includes('anxious') ||
+    lower.includes('stress')
+  ) {
     return QUICK_REPLIES.breathing;
   }
   return QUICK_REPLIES.default;
 }
 
 export async function chatCompletion(messages: ChatMessage[]): Promise<LLMResponse> {
-  const fullMessages: ChatMessage[] = [
-    { role: 'system', content: SYSTEM_PROMPT },
-    ...messages,
-  ];
+  const fullMessages: ChatMessage[] = [{ role: 'system', content: SYSTEM_PROMPT }, ...messages];
 
   try {
     const res = await fetch(`${LLM_BASE_URL}/chat/completions`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${LLM_API_KEY}`,
+        Authorization: `Bearer ${LLM_API_KEY}`,
       },
       body: JSON.stringify({
         model: LLM_MODEL,
@@ -87,24 +90,28 @@ export function fallbackResponse(messages: ChatMessage[]): LLMResponse {
 
   if (text.includes('breath') || text.includes('calm') || text.includes('anxiety')) {
     return {
-      content: "Take a slow breath in through your nose for 4 counts, hold for 4, and exhale through your mouth for 6. Repeat a few times. You've got this.",
+      content:
+        "Take a slow breath in through your nose for 4 counts, hold for 4, and exhale through your mouth for 6. Repeat a few times. You've got this.",
       quickReplies: getQuickReplies('breathing'),
     };
   }
   if (text.includes('plan') || text.includes('schedule') || text.includes('organize')) {
     return {
-      content: "Let's break it down. What's the one thing you need to do next? Start small — even 5 minutes of focused work can build momentum.",
+      content:
+        "Let's break it down. What's the one thing you need to do next? Start small — even 5 minutes of focused work can build momentum.",
       quickReplies: getQuickReplies('planning'),
     };
   }
   if (text.includes('talk') || text.includes('alone') || text.includes('help')) {
     return {
-      content: "You're not alone in this. Your school likely has counseling services available. Would you like me to help you find the right contact?",
+      content:
+        "You're not alone in this. Your school likely has counseling services available. Would you like me to help you find the right contact?",
       quickReplies: getQuickReplies('default'),
     };
   }
   return {
-    content: "I hear you. It's okay to feel this way. Let's take it one step at a time. What would be most helpful for you right now?",
+    content:
+      "I hear you. It's okay to feel this way. Let's take it one step at a time. What would be most helpful for you right now?",
     quickReplies: getQuickReplies('default'),
   };
 }

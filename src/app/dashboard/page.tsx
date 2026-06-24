@@ -24,6 +24,19 @@ export default function DashboardPage() {
   useEffect(() => {
     if (status !== 'authenticated') return;
 
+    if (!session?.user?.role) {
+      fetch('/api/privacy/consent')
+        .then((r) => r.json())
+        .then((d) => {
+          if (!d.consentCompleted) router.push('/consent');
+        })
+        .catch(() => {});
+    }
+  }, [status, session, router]);
+
+  useEffect(() => {
+    if (status !== 'authenticated') return;
+
     async function fetchData() {
       try {
         setLoading(true);
@@ -64,14 +77,16 @@ export default function DashboardPage() {
 
   const submitted = assignments.filter((a) => a.submitted).length;
   const graded = assignments.filter((a) => a.graded).length;
-  const avgScore = assignments.filter((a) => a.score != null).reduce((s, a) => s + (a.score ?? 0), 0);
+  const avgScore = assignments
+    .filter((a) => a.score != null)
+    .reduce((s, a) => s + (a.score ?? 0), 0);
   const avgCount = assignments.filter((a) => a.score != null).length;
 
   return (
     <>
       <GridOverlay />
       <main className="brutal-container min-h-screen py-16 space-y-12">
-        <header className="flex items-start justify-between animate-fade-in">
+        <header className="flex flex-col xs:flex-row items-start justify-between gap-4 animate-fade-in">
           <div className="space-y-2">
             <p className="font-mono text-caption uppercase tracking-widest text-ink-400">
               Dashboard
@@ -114,7 +129,9 @@ export default function DashboardPage() {
           </Card>
           <Card title="Graded" variant="default">
             <p className="font-display text-display font-bold">{graded}</p>
-            <p className="font-mono text-caption text-ink-400">{assignments.length - graded} remaining</p>
+            <p className="font-mono text-caption text-ink-400">
+              {assignments.length - graded} remaining
+            </p>
           </Card>
           <Card title="Avg. Score" variant={avgCount > 0 ? 'accent' : 'default'}>
             <p className="font-display text-display font-bold">
@@ -220,12 +237,8 @@ export default function DashboardPage() {
                   >
                     <div className={`w-2 h-2 rounded-full ${statusColor} flex-shrink-0`} />
                     <div className="flex-1 min-w-0">
-                      <p className="font-display text-body-sm font-semibold truncate">
-                        {a.title}
-                      </p>
-                      <p className="font-mono text-caption text-ink-400 truncate">
-                        {a.courseName}
-                      </p>
+                      <p className="font-display text-body-sm font-semibold truncate">{a.title}</p>
+                      <p className="font-mono text-caption text-ink-400 truncate">{a.courseName}</p>
                     </div>
                     <div className="text-right flex-shrink-0">
                       <p
@@ -265,7 +278,7 @@ export default function DashboardPage() {
 
         <footer className="border-t border-ink pt-8 animate-fade-in">
           <p className="font-mono text-caption text-ink-400">
-            Connected via {((session!.user as any).lms ?? 'unknown')} · Auto-refreshes every 15min
+            Connected via {(session!.user as any).lms ?? 'unknown'} · Auto-refreshes every 15min
           </p>
         </footer>
       </main>

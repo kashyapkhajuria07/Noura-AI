@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { GridOverlay } from '@/components/GridOverlay';
 import { useNotifications } from '@/lib/notifications/context';
-import { getSocket } from '@/lib/notifications/client';
+import { isConnected, onConnectionChange } from '@/lib/notifications/client';
 import type { NotificationType } from '@/lib/notifications/types';
 
 const SAMPLE_MESSAGES: Record<string, { title: string; message: string }> = {
@@ -27,19 +27,26 @@ export default function NotificationsDemoPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const { current, visible, dismiss, expand, history } = useNotifications();
-  const [wsStatus, setWsStatus] = useState<'connected' | 'disconnected' | 'connecting'>('connecting');
+  const [wsStatus, setWsStatus] = useState<'connected' | 'disconnected' | 'connecting'>(
+    'connecting'
+  );
 
   useEffect(() => {
     if (status === 'unauthenticated') router.push('/auth/login');
   }, [status, router]);
 
   useEffect(() => {
-    const socket = getSocket();
-    if (socket) {
-      socket.on('connect', () => setWsStatus('connected'));
-      socket.on('disconnect', () => setWsStatus('disconnected'));
-      setWsStatus(socket.connected ? 'connected' : 'disconnected');
-    }
+    const unsub = onConnectionChange((connected) => {
+      setWsStatus(connected ? 'connected' : 'disconnected');
+    });
+    const check = setInterval(() => {
+      setWsStatus(isConnected() ? 'connected' : 'disconnected');
+    }, 1000);
+    setWsStatus(isConnected() ? 'connected' : 'disconnected');
+    return () => {
+      unsub();
+      clearInterval(check);
+    };
   }, []);
 
   if (status === 'loading') {
@@ -68,11 +75,15 @@ export default function NotificationsDemoPage() {
         <section className="animate-fade-in-up space-y-6">
           <div className="flex items-center gap-3">
             <span className="font-mono text-caption text-ink-400">WebSocket:</span>
-            <span className={`font-mono text-caption px-2 py-0.5 rounded-brutal-sm ${
-              wsStatus === 'connected' ? 'bg-chrome text-paper' :
-              wsStatus === 'disconnected' ? 'bg-accent text-paper' :
-              'bg-ink-200 text-ink'
-            }`}>
+            <span
+              className={`font-mono text-caption px-2 py-0.5 rounded-brutal-sm ${
+                wsStatus === 'connected'
+                  ? 'bg-chrome text-paper'
+                  : wsStatus === 'disconnected'
+                    ? 'bg-accent text-paper'
+                    : 'bg-ink-200 text-ink'
+              }`}
+            >
               {wsStatus}
             </span>
           </div>
@@ -81,7 +92,10 @@ export default function NotificationsDemoPage() {
             {(['risk_red', 'risk_amber', 'intervention'] as const).map((type) => {
               const info = SAMPLE_MESSAGES[type];
               return (
-                <div key={type} className="p-5 border-brutal border-ink rounded-brutal shadow-brutal-sm space-y-3">
+                <div
+                  key={type}
+                  className="p-5 border-brutal border-ink rounded-brutal shadow-brutal-sm space-y-3"
+                >
                   <p className="font-mono text-caption uppercase tracking-wider text-ink-400">
                     {type.replace(/_/g, ' ')}
                   </p>
@@ -164,7 +178,10 @@ export default function NotificationsDemoPage() {
             ) : (
               <div className="space-y-2 max-h-60 overflow-y-auto">
                 {history.map((n) => (
-                  <div key={n.id} className="flex items-start justify-between p-3 border-b border-ink-200">
+                  <div
+                    key={n.id}
+                    className="flex items-start justify-between p-3 border-b border-ink-200"
+                  >
                     <div className="min-w-0 flex-1">
                       <span className="font-mono text-caption uppercase tracking-wider text-ink-400">
                         {n.type.replace(/_/g, ' ')}
@@ -183,7 +200,9 @@ export default function NotificationsDemoPage() {
 
         {current && visible && (
           <div className="animate-fade-in border-brutal border-ink rounded-brutal p-5 bg-ink-50 space-y-2">
-            <p className="font-mono text-caption uppercase tracking-wider text-ink-400">Current Toast</p>
+            <p className="font-mono text-caption uppercase tracking-wider text-ink-400">
+              Current Toast
+            </p>
             <p className="font-display text-body-sm font-semibold">{current.title}</p>
             <p className="font-mono text-caption text-ink-500">{current.message}</p>
             <p className="font-mono text-caption text-ink-400">ID: {current.id}</p>

@@ -22,7 +22,13 @@ interface StudentDetail {
   riskTier: CompositeTier;
   compositeScore: number;
   timeline: RiskTimelineEntry[];
-  riskScores: { level: string; score: number; compositeScore?: number; tier?: string; computedAt: string }[];
+  riskScores: {
+    level: string;
+    score: number;
+    compositeScore?: number;
+    tier?: string;
+    computedAt: string;
+  }[];
   activities: { type: string; title: string; timestamp: string }[];
   interventions: { type: string; status: string; title: string }[];
   consent: { scope: string; granted: boolean }[];
@@ -30,17 +36,23 @@ interface StudentDetail {
 
 function tierColor(tier: CompositeTier): string {
   switch (tier) {
-    case 'red': return 'bg-accent text-paper';
-    case 'amber': return 'bg-ink-300 text-ink';
-    default: return 'bg-chrome/50 text-ink-600';
+    case 'red':
+      return 'bg-accent text-paper';
+    case 'amber':
+      return 'bg-ink-300 text-ink';
+    default:
+      return 'bg-chrome/50 text-ink-600';
   }
 }
 
 function tierDot(tier: CompositeTier): string {
   switch (tier) {
-    case 'red': return 'bg-accent';
-    case 'amber': return 'bg-ink-300';
-    default: return 'bg-chrome';
+    case 'red':
+      return 'bg-accent';
+    case 'amber':
+      return 'bg-ink-300';
+    default:
+      return 'bg-chrome';
   }
 }
 
@@ -98,18 +110,47 @@ function TimelineChart({ timeline, tier }: { timeline: RiskTimelineEntry[]; tier
     <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full max-w-[400px] h-auto">
       {yTicks.map((t) => (
         <g key={t.label}>
-          <line x1={pad.left} y1={t.y} x2={svgWidth - pad.right} y2={t.y} stroke="currentColor" className="text-ink-200" strokeWidth={1} />
-          <text x={pad.left - 6} y={t.y + 4} textAnchor="end" className="fill-ink-400" fontSize={10} fontFamily="Departure Mono, monospace">
+          <line
+            x1={pad.left}
+            y1={t.y}
+            x2={svgWidth - pad.right}
+            y2={t.y}
+            stroke="currentColor"
+            className="text-ink-200"
+            strokeWidth={1}
+          />
+          <text
+            x={pad.left - 6}
+            y={t.y + 4}
+            textAnchor="end"
+            className="fill-ink-400"
+            fontSize={10}
+            fontFamily="Departure Mono, monospace"
+          >
             {t.label}
           </text>
         </g>
       ))}
       {xTicks.map((t) => (
-        <text key={t.label} x={t.x} y={svgHeight - 6} textAnchor="middle" className="fill-ink-400" fontSize={9} fontFamily="Departure Mono, monospace">
+        <text
+          key={t.label}
+          x={t.x}
+          y={svgHeight - 6}
+          textAnchor="middle"
+          className="fill-ink-400"
+          fontSize={9}
+          fontFamily="Departure Mono, monospace"
+        >
           {t.label}
         </text>
       ))}
-      <text x={pad.left} y={10} className="fill-ink-400 italic" fontSize={9} fontFamily="Departure Mono, monospace">
+      <text
+        x={pad.left}
+        y={10}
+        className="fill-ink-400 italic"
+        fontSize={9}
+        fontFamily="Departure Mono, monospace"
+      >
         Score
       </text>
       {points.length > 1 && (
@@ -122,7 +163,13 @@ function TimelineChart({ timeline, tier }: { timeline: RiskTimelineEntry[]; tier
       )}
       {points.map((p, i) => (
         <g key={i}>
-          <circle cx={p.x} cy={p.y} r={4} className={`fill-${bgHue} stroke-paper`} strokeWidth={2} />
+          <circle
+            cx={p.x}
+            cy={p.y}
+            r={4}
+            className={`fill-${bgHue} stroke-paper`}
+            strokeWidth={2}
+          />
           <title>{`${p.date.slice(0, 10)}: ${p.score} (${p.tier})`}</title>
         </g>
       ))}
@@ -196,9 +243,8 @@ export default function AdminPage() {
     );
   }
 
-  const filtered = filterTier === 'all'
-    ? students
-    : students.filter((s) => s.riskTier === filterTier);
+  const filtered =
+    filterTier === 'all' ? students : students.filter((s) => s.riskTier === filterTier);
 
   const counts = useMemo(() => {
     const c = { green: 0, amber: 0, red: 0 };
@@ -223,20 +269,40 @@ export default function AdminPage() {
       <GridOverlay />
       <main className="brutal-container min-h-screen py-16 space-y-12">
         <header className="animate-fade-in">
-          <p className="font-mono text-caption uppercase tracking-widest text-ink-400">
-            Admin Panel
-          </p>
-          <h1 className="font-display text-heading font-bold">Student Management</h1>
-          <p className="font-mono text-caption text-ink-400 mt-2">
-            Composite risk scores: 60% rule engine + 40% ML sentiment analysis
-          </p>
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="font-mono text-caption uppercase tracking-widest text-ink-400">
+                Admin Panel
+              </p>
+              <h1 className="font-display text-heading font-bold">Student Management</h1>
+              <p className="font-mono text-caption text-ink-400 mt-2">
+                Composite risk scores: 60% rule engine + 40% ML sentiment analysis
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <a
+                href="/admin/monitoring"
+                className="font-mono text-caption text-chrome hover:text-chrome-dark transition-colors border-b border-chrome"
+              >
+                Monitoring &rarr;
+              </a>
+              <a
+                href="/admin/analytics"
+                className="font-mono text-caption text-chrome hover:text-chrome-dark transition-colors border-b border-chrome"
+              >
+                Analytics &rarr;
+              </a>
+            </div>
+          </div>
         </header>
 
         <section className="animate-fade-in-up space-y-4">
           <h2 className="font-display text-subheading font-semibold">Create Student</h2>
           <div className="flex flex-wrap gap-3 items-end">
             <div className="flex-1 min-w-[200px]">
-              <label className="block font-mono text-caption text-ink-500 italic mb-1">Email *</label>
+              <label className="block font-mono text-caption text-ink-500 italic mb-1">
+                Email *
+              </label>
               <input
                 value={newEmail}
                 onChange={(e) => setNewEmail(e.target.value)}
@@ -288,12 +354,24 @@ export default function AdminPage() {
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b-2 border-ink">
-                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">Tier</th>
-                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">Name</th>
-                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">Email</th>
-                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">Score</th>
-                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic hidden sm:table-cell">Created</th>
-                  <th className="font-mono text-caption uppercase tracking-wider text-right py-3 italic">Actions</th>
+                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">
+                    Tier
+                  </th>
+                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">
+                    Name
+                  </th>
+                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">
+                    Email
+                  </th>
+                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">
+                    Score
+                  </th>
+                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic hidden sm:table-cell">
+                    Created
+                  </th>
+                  <th className="font-mono text-caption uppercase tracking-wider text-right py-3 italic">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -311,7 +389,9 @@ export default function AdminPage() {
                     </td>
                     <td className="py-3 pr-4 text-body-sm text-ink-500">{s.email}</td>
                     <td className="py-3 pr-4">
-                      <span className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${tierColor(s.riskTier)}`}>
+                      <span
+                        className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${tierColor(s.riskTier)}`}
+                      >
                         {s.compositeScore.toFixed(2)}
                       </span>
                     </td>
@@ -333,7 +413,10 @@ export default function AdminPage() {
                 ))}
                 {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="py-8 text-center font-mono text-caption text-ink-400">
+                    <td
+                      colSpan={6}
+                      className="py-8 text-center font-mono text-caption text-ink-400"
+                    >
                       No students match this tier
                     </td>
                   </tr>
@@ -352,7 +435,9 @@ export default function AdminPage() {
                 </h2>
                 <div className="flex items-center gap-2 mt-1">
                   <div className={`w-2.5 h-2.5 rounded-full ${tierDot(selected.riskTier)}`} />
-                  <span className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${tierColor(selected.riskTier)}`}>
+                  <span
+                    className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${tierColor(selected.riskTier)}`}
+                  >
                     {selected.riskTier} · {selected.compositeScore.toFixed(3)}
                   </span>
                 </div>
@@ -382,14 +467,23 @@ export default function AdminPage() {
                 ) : (
                   selected.riskScores.map((r, i) => (
                     <div key={i} className="flex items-center justify-between gap-2">
-                      <span className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${
-                        r.level === 'CRITICAL' ? 'bg-accent text-paper' :
-                        r.level === 'HIGH' ? 'bg-accent/80 text-paper' :
-                        r.level === 'MEDIUM' ? 'bg-ink-300 text-ink' :
-                        'bg-ink-100 text-ink-600'
-                      }`}>{r.level}</span>
+                      <span
+                        className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${
+                          r.level === 'CRITICAL'
+                            ? 'bg-accent text-paper'
+                            : r.level === 'HIGH'
+                              ? 'bg-accent/80 text-paper'
+                              : r.level === 'MEDIUM'
+                                ? 'bg-ink-300 text-ink'
+                                : 'bg-ink-100 text-ink-600'
+                        }`}
+                      >
+                        {r.level}
+                      </span>
                       {r.tier && (
-                        <span className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${tierColor(r.tier as CompositeTier)}`}>
+                        <span
+                          className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${tierColor(r.tier as CompositeTier)}`}
+                        >
                           {r.tier}
                         </span>
                       )}
@@ -435,11 +529,17 @@ export default function AdminPage() {
                       <span className="font-mono text-caption bg-ink-100 px-1.5 py-0.5 rounded-brutal-sm">
                         {iv.type.replace(/_/g, ' ')}
                       </span>
-                      <span className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${
-                        iv.status === 'COMPLETED' ? 'bg-chrome text-paper' :
-                        iv.status === 'ACTIVE' ? 'bg-ink text-paper' :
-                        'bg-ink-200 text-ink'
-                      }`}>{iv.status}</span>
+                      <span
+                        className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${
+                          iv.status === 'COMPLETED'
+                            ? 'bg-chrome text-paper'
+                            : iv.status === 'ACTIVE'
+                              ? 'bg-ink text-paper'
+                              : 'bg-ink-200 text-ink'
+                        }`}
+                      >
+                        {iv.status}
+                      </span>
                       <span className="text-body-sm truncate max-w-[120px]">{iv.title}</span>
                     </div>
                   ))
@@ -456,9 +556,13 @@ export default function AdminPage() {
                   selected.consent.map((c, i) => (
                     <div key={i} className="flex items-center justify-between">
                       <span className="font-mono text-caption">{c.scope.replace(/_/g, ' ')}</span>
-                      <span className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${
-                        c.granted ? 'bg-chrome text-paper' : 'bg-accent text-paper'
-                      }`}>{c.granted ? 'Granted' : 'Revoked'}</span>
+                      <span
+                        className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${
+                          c.granted ? 'bg-chrome text-paper' : 'bg-accent text-paper'
+                        }`}
+                      >
+                        {c.granted ? 'Granted' : 'Revoked'}
+                      </span>
                     </div>
                   ))
                 )}

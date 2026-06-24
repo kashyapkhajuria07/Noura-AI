@@ -23,9 +23,7 @@ export default function LoginPage() {
               Student Burnout
             </p>
             <h1 className="font-display text-heading font-bold">Sign In</h1>
-            <p className="text-body-sm text-ink-500">
-              Connect your LMS account to get started
-            </p>
+            <p className="text-body-sm text-ink-500">Connect your LMS account to get started</p>
           </div>
 
           <div className="space-y-4">

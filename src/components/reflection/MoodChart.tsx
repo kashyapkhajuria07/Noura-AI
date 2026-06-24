@@ -53,13 +53,15 @@ export function MoodChart({ entries, days = 30 }: MoodChartProps) {
       })
       .join(' ');
 
-    const areaD = points
-      .map((p, i) => {
-        const x = PAD.left + i * stepX;
-        const y = PAD.top + chartH - ((p.avg - mins + 0.2) / (range + 0.4)) * chartH;
-        return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
-      })
-      .join(' ') + ` L ${PAD.left + (points.length - 1) * stepX} ${PAD.top + chartH} L ${PAD.left} ${PAD.top + chartH} Z`;
+    const areaD =
+      points
+        .map((p, i) => {
+          const x = PAD.left + i * stepX;
+          const y = PAD.top + chartH - ((p.avg - mins + 0.2) / (range + 0.4)) * chartH;
+          return `${i === 0 ? 'M' : 'L'} ${x} ${y}`;
+        })
+        .join(' ') +
+      ` L ${PAD.left + (points.length - 1) * stepX} ${PAD.top + chartH} L ${PAD.left} ${PAD.top + chartH} Z`;
 
     const yTicks = [1, 2, 3, 4, 5];
     const xLabels = points.filter((_, i) => {
@@ -82,16 +84,38 @@ export function MoodChart({ entries, days = 30 }: MoodChartProps) {
 
   return (
     <div className="space-y-3">
-      <h3 className="font-display text-subheading font-semibold">Mood Trend &mdash; Last {days} Days</h3>
+      <h3 className="font-display text-subheading font-semibold">
+        Mood Trend &mdash; Last {days} Days
+      </h3>
       <div className="overflow-x-auto">
-        <svg width={WIDTH} height={HEIGHT} viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="min-w-[600px]">
+        <svg
+          width={WIDTH}
+          height={HEIGHT}
+          viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
+          className="min-w-[600px]"
+        >
           {/* Grid lines */}
           {chartData.yTicks.map((tick) => {
-            const y = PAD.top + chartData.chartH - ((tick - chartData.mins + 0.2) / (chartData.range + 0.4)) * chartData.chartH;
+            const y =
+              PAD.top +
+              chartData.chartH -
+              ((tick - chartData.mins + 0.2) / (chartData.range + 0.4)) * chartData.chartH;
             return (
               <g key={tick}>
-                <line x1={PAD.left} y1={y} x2={WIDTH - PAD.right} y2={y} stroke="#cccccc" strokeWidth={1} />
-                <text x={PAD.left - 6} y={y + 4} textAnchor="end" className="font-mono text-[10px] fill-ink-400 italic">
+                <line
+                  x1={PAD.left}
+                  y1={y}
+                  x2={WIDTH - PAD.right}
+                  y2={y}
+                  stroke="#cccccc"
+                  strokeWidth={1}
+                />
+                <text
+                  x={PAD.left - 6}
+                  y={y + 4}
+                  textAnchor="end"
+                  className="font-mono text-[10px] fill-ink-400 italic"
+                >
                   {tick}
                 </text>
               </g>
@@ -102,12 +126,22 @@ export function MoodChart({ entries, days = 30 }: MoodChartProps) {
           <path d={chartData.areaD} fill="rgba(37, 99, 235, 0.08)" />
 
           {/* Line */}
-          <path d={chartData.pathD} fill="none" stroke="#2563eb" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+          <path
+            d={chartData.pathD}
+            fill="none"
+            stroke="#2563eb"
+            strokeWidth={2}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
 
           {/* Dots */}
           {chartData.points.map((p, i) => {
             const x = PAD.left + i * chartData.stepX;
-            const y = PAD.top + chartData.chartH - ((p.avg - chartData.mins + 0.2) / (chartData.range + 0.4)) * chartData.chartH;
+            const y =
+              PAD.top +
+              chartData.chartH -
+              ((p.avg - chartData.mins + 0.2) / (chartData.range + 0.4)) * chartData.chartH;
             return (
               <g key={p.date}>
                 <circle cx={x} cy={y} r={3} fill="#2563eb" stroke="#fafaf9" strokeWidth={2} />

@@ -12,22 +12,28 @@ interface TaskCardProps {
 }
 
 export function TaskCard({ task, isDragOverlay, onEdit, onDelete }: TaskCardProps) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: task.id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+    id: task.id,
+  });
 
-  const style = isDragOverlay ? undefined : {
-    transform: CSS.Transform.toString(transform),
-    transition,
-    opacity: isDragging ? 0.3 : 1,
-  };
+  const style = isDragOverlay
+    ? undefined
+    : {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.3 : 1,
+      };
 
   const due = new Date(task.dueDate);
   const isOverdue = due < new Date() && task.status !== 'done';
   const daysLeft = Math.ceil((due.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
 
   const priorityColor =
-    task.priority === 'high' ? 'bg-accent' :
-    task.priority === 'medium' ? 'bg-ink-300' :
-    'bg-ink-200';
+    task.priority === 'high'
+      ? 'bg-accent'
+      : task.priority === 'medium'
+        ? 'bg-ink-300'
+        : 'bg-ink-200';
 
   return (
     <div
@@ -45,7 +51,10 @@ export function TaskCard({ task, isDragOverlay, onEdit, onDelete }: TaskCardProp
         <div className="flex items-center gap-1 flex-shrink-0">
           {onEdit && (
             <button
-              onClick={(e) => { e.stopPropagation(); onEdit(task.id); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(task.id);
+              }}
               className="font-mono text-caption text-ink-400 hover:text-chrome transition-colors px-1"
               aria-label="Edit task"
             >
@@ -54,7 +63,10 @@ export function TaskCard({ task, isDragOverlay, onEdit, onDelete }: TaskCardProp
           )}
           {onDelete && (
             <button
-              onClick={(e) => { e.stopPropagation(); onDelete(task.id); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onDelete(task.id);
+              }}
               className="font-mono text-caption text-ink-400 hover:text-accent transition-colors px-1"
               aria-label="Delete task"
             >

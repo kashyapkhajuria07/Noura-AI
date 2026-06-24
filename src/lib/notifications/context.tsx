@@ -19,7 +19,13 @@ interface NotificationContextValue {
 
 const NotificationContext = createContext<NotificationContextValue | null>(null);
 
-export function NotificationProvider({ children, studentId }: { children: ReactNode; studentId?: string }) {
+export function NotificationProvider({
+  children,
+  studentId,
+}: {
+  children: ReactNode;
+  studentId?: string;
+}) {
   const [current, setCurrent] = useState<Notification | null>(null);
   const [visible, setVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -27,7 +33,9 @@ export function NotificationProvider({ children, studentId }: { children: ReactN
 
   useEffect(() => {
     const socket = connectSocket(studentId);
-    return () => { disconnectSocket(); };
+    return () => {
+      disconnectSocket();
+    };
   }, [studentId]);
 
   useEffect(() => {
@@ -61,7 +69,9 @@ export function NotificationProvider({ children, studentId }: { children: ReactN
   const toggleExpand = useCallback(() => setExpanded((v) => !v), []);
 
   return (
-    <NotificationContext.Provider value={{ current, visible, expanded, history, show, dismiss, expand, collapse, toggleExpand }}>
+    <NotificationContext.Provider
+      value={{ current, visible, expanded, history, show, dismiss, expand, collapse, toggleExpand }}
+    >
       {children}
     </NotificationContext.Provider>
   );

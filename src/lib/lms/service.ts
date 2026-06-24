@@ -30,7 +30,9 @@ async function fetchCanvas(token: string): Promise<any> {
   const assignments = await Promise.all(
     courses.slice(0, 10).map(async (c: any) => {
       try {
-        const res = await fetch(`${base}/api/v1/courses/${c.id}/assignments?per_page=20`, { headers });
+        const res = await fetch(`${base}/api/v1/courses/${c.id}/assignments?per_page=20`, {
+          headers,
+        });
         const data = await res.json();
         return data.map((a: any) => ({ ...a, course_name: c.name }));
       } catch {
@@ -55,10 +57,9 @@ async function fetchGoogleClassroom(token: string): Promise<any> {
   const assignments = await Promise.all(
     courses.slice(0, 10).map(async (c: any) => {
       try {
-        const res = await fetch(
-          `https://classroom.googleapis.com/v1/courses/${c.id}/courseWork`,
-          { headers }
-        );
+        const res = await fetch(`https://classroom.googleapis.com/v1/courses/${c.id}/courseWork`, {
+          headers,
+        });
         const data = await res.json();
         return (data.courseWork ?? []).map((a: any) => ({
           ...a,

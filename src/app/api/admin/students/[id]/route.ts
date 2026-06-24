@@ -1,7 +1,13 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth/auth-options';
-import { studentQueries, riskScoreQueries, activityQueries, interventionQueries, consentQueries } from '@/lib/db/queries';
+import {
+  studentQueries,
+  riskScoreQueries,
+  activityQueries,
+  interventionQueries,
+  consentQueries,
+} from '@/lib/db/queries';
 
 export async function GET(_request: Request, { params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);

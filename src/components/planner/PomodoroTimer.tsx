@@ -65,7 +65,10 @@ export function PomodoroTimer({ onClose }: PomodoroTimerProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 backdrop-blur-sm animate-fade-in" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-ink/60 backdrop-blur-sm animate-fade-in"
+      onClick={onClose}
+    >
       <div
         className="bg-paper border-brutal border-ink rounded-brutal shadow-brutal p-8 w-full max-w-sm mx-4 space-y-6"
         onClick={(e) => e.stopPropagation()}
@@ -75,7 +78,10 @@ export function PomodoroTimer({ onClose }: PomodoroTimerProps) {
             {phase === 'work' ? 'Focus Session' : 'Break Time'}
           </p>
           {onClose && (
-            <button onClick={onClose} className="font-mono text-caption text-ink-400 hover:text-accent transition-colors">
+            <button
+              onClick={onClose}
+              className="font-mono text-caption text-ink-400 hover:text-accent transition-colors"
+            >
               close
             </button>
           )}
@@ -86,7 +92,9 @@ export function PomodoroTimer({ onClose }: PomodoroTimerProps) {
             <svg width="128" height="128" viewBox="0 0 128 128" className="transform -rotate-90">
               <circle cx="64" cy="64" r="54" fill="none" stroke="#e6e6e6" strokeWidth="6" />
               <circle
-                cx="64" cy="64" r="54"
+                cx="64"
+                cy="64"
+                r="54"
                 fill="none"
                 stroke="#2563eb"
                 strokeWidth="6"
