@@ -1,0 +1,12 @@
+{
+  "name": "ws-service",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "socket.io": "^4.8.0",
+    "uuid": "^10.0.0"
+  }
+}

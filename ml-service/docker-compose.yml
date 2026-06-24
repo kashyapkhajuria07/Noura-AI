@@ -1,0 +1,19 @@
+services:
+  ml-service:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - ML_MODEL_NAME=distilbert-base-uncased-finetuned-sst-2-english
+      - ML_DEVICE=cpu
+      - ML_BATCH_SIZE=32
+      - ML_LOG_LEVEL=info
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 2G

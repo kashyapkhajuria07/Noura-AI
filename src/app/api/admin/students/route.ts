@@ -7,9 +7,16 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const students = await studentQueries.list(100);
+  const students: any[] = await studentQueries.list(100);
   const total = await studentQueries.count();
-  return NextResponse.json({ data: students, total });
+  return NextResponse.json({
+    data: students.map((s) => ({
+      ...s,
+      riskTier: s.riskTier ?? 'green',
+      compositeScore: s.compositeScore ?? 0,
+    })),
+    total,
+  });
 }
 
 export async function POST(request: Request) {

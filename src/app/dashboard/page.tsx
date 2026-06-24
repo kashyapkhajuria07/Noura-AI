@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { GridOverlay } from '@/components/GridOverlay';
 import { Card } from '@/components/Card';
+import { useChat } from '@/components/chat/ChatWrapper';
 import type { LMSActivity, LMSAssignment } from '@/lib/lms/types';
 
 export default function DashboardPage() {
@@ -12,6 +13,7 @@ export default function DashboardPage() {
   const router = useRouter();
   const [activities, setActivities] = useState<LMSActivity[]>([]);
   const [assignments, setAssignments] = useState<LMSAssignment[]>([]);
+  const { openChat } = useChat();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -79,12 +81,20 @@ export default function DashboardPage() {
             </h1>
             <p className="text-body-sm text-ink-500">{session?.user?.email}</p>
           </div>
-          <button
-            onClick={() => signOut({ callbackUrl: '/auth/login' })}
-            className="font-mono text-caption text-ink-400 hover:text-accent transition-colors border-b border-ink hover:border-accent"
-          >
-            Sign out
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => openChat()}
+              className="px-4 py-2 bg-ink text-paper font-display text-body-sm font-semibold border-brutal border-ink rounded-brutal-sm shadow-brutal-sm hover:shadow-brutal transition-all active:translate-x-0.5 active:translate-y-0.5"
+            >
+              Support Chat
+            </button>
+            <button
+              onClick={() => signOut({ callbackUrl: '/auth/login' })}
+              className="font-mono text-caption text-ink-400 hover:text-accent transition-colors border-b border-ink hover:border-accent"
+            >
+              Sign out
+            </button>
+          </div>
         </header>
 
         {error && (

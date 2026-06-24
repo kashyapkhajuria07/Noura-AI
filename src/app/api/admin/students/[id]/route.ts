@@ -10,6 +10,7 @@ export async function GET(_request: Request, { params }: { params: { id: string 
   const student = await studentQueries.findWithAccounts(params.id);
   if (!student) return NextResponse.json({ error: 'Not found' }, { status: 404 });
 
+  const studentRaw: any = await studentQueries.findById(params.id);
   const [riskScores, activities, interventions, consent] = await Promise.all([
     riskScoreQueries.history(params.id, 10),
     activityQueries.findRecent(params.id, 14),
@@ -17,8 +18,19 @@ export async function GET(_request: Request, { params }: { params: { id: string 
     consentQueries.findByStudent(params.id),
   ]);
 
+  const timeline = Array.isArray(studentRaw?.riskTimeline) ? studentRaw.riskTimeline : [];
+
   return NextResponse.json({
-    data: { ...student, riskScores, activities, interventions, consent },
+    data: {
+      ...student,
+      riskTier: studentRaw?.riskTier ?? 'green',
+      compositeScore: studentRaw?.compositeScore ?? 0,
+      timeline,
+      riskScores,
+      activities,
+      interventions,
+      consent,
+    },
   });
 }
 

@@ -1,12 +1,12 @@
-import { assessAllStudentsDb } from './server';
+import { assessAllComposite } from './composite';
 
 export async function runDailyRiskAssessment(): Promise<{
   processed: number;
   durationMs: number;
   errors: string[];
 }> {
-  console.log(`[RiskBatch] Starting daily assessment at ${new Date().toISOString()}`);
-  const result = await assessAllStudentsDb(50);
+  console.log(`[RiskBatch] Starting composite daily assessment at ${new Date().toISOString()}`);
+  const result = await assessAllComposite(50);
 
   console.log(
     `[RiskBatch] Complete: ${result.processed} students processed in ${result.durationMs}ms` +

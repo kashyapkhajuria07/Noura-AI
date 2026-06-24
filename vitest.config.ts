@@ -2,6 +2,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
 
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import { playwright } from '@vitest/browser-playwright';
@@ -14,11 +15,11 @@ const alias = {
 };
 
 export default defineConfig({
+  resolve: { alias },
   test: {
     projects: [
       {
         extends: true,
-        resolve: { alias },
         plugins: [
           storybookTest({ configDir: path.join(dirname, '.storybook') }),
         ],
@@ -34,13 +35,26 @@ export default defineConfig({
       },
       {
         extends: true,
-        resolve: { alias },
         test: {
           name: 'unit',
-          include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+          include: ['src/**/*.test.ts'],
           environment: 'node',
         },
       },
+      {
+        extends: true,
+        plugins: [react()],
+        test: {
+          name: 'components',
+          include: ['src/components/**/*.test.tsx', 'src/components/**/*.test.ts'],
+          environment: 'jsdom',
+        },
+      },
     ],
+  },
+  server: {
+    watch: {
+      ignored: ['**/.next/**'],
+    },
   },
 });

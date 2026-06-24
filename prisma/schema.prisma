@@ -52,6 +52,10 @@ model Student {
   externalId    String?  @unique
   encryptedData String?
 
+  riskTier       String? @default("green")
+  compositeScore Float?  @default(0)
+  riskTimeline   Json?
+
   lmsAccounts    LMSAccount[]
   activities     LMSActivity[]
   riskScores     RiskScore[]
@@ -64,6 +68,8 @@ model Student {
 
   @@index([email])
   @@index([externalId])
+  @@index([riskTier])
+  @@index([compositeScore])
   @@map("students")
 }
 
@@ -119,16 +125,19 @@ model RiskScore {
   studentId   String
   student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  level       RiskLevel
-  score       Float
-  factors     Json?
-  metadata    Json?
+  level         RiskLevel
+  score         Float
+  compositeScore Float?
+  tier          String?
+  factors       Json?
+  metadata      Json?
 
   computedAt  DateTime @default(now())
 
   @@index([studentId, computedAt(sort: Desc)])
   @@index([computedAt(sort: Desc)])
   @@index([level])
+  @@index([tier])
   @@map("risk_scores")
 }
 

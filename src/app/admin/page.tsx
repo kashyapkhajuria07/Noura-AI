@@ -2,13 +2,16 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { GridOverlay } from '@/components/GridOverlay';
+import type { CompositeTier, RiskTimelineEntry } from '@/lib/risk/composite';
 
-interface Student {
+interface StudentRow {
   id: string;
   email: string;
   name: string | null;
+  riskTier: CompositeTier;
+  compositeScore: number;
   createdAt: string;
 }
 
@@ -16,18 +19,124 @@ interface StudentDetail {
   id: string;
   email: string;
   name: string | null;
-  riskScores: { level: string; score: number; computedAt: string }[];
+  riskTier: CompositeTier;
+  compositeScore: number;
+  timeline: RiskTimelineEntry[];
+  riskScores: { level: string; score: number; compositeScore?: number; tier?: string; computedAt: string }[];
   activities: { type: string; title: string; timestamp: string }[];
   interventions: { type: string; status: string; title: string }[];
   consent: { scope: string; granted: boolean }[];
 }
 
+function tierColor(tier: CompositeTier): string {
+  switch (tier) {
+    case 'red': return 'bg-accent text-paper';
+    case 'amber': return 'bg-ink-300 text-ink';
+    default: return 'bg-chrome/50 text-ink-600';
+  }
+}
+
+function tierDot(tier: CompositeTier): string {
+  switch (tier) {
+    case 'red': return 'bg-accent';
+    case 'amber': return 'bg-ink-300';
+    default: return 'bg-chrome';
+  }
+}
+
+function TimelineChart({ timeline, tier }: { timeline: RiskTimelineEntry[]; tier: CompositeTier }) {
+  const bgHue = tier === 'red' ? 'accent' : tier === 'amber' ? 'ink-300' : 'chrome';
+  const svgWidth = 400;
+  const svgHeight = 180;
+  const pad = { top: 20, right: 20, bottom: 40, left: 40 };
+  const chartW = svgWidth - pad.left - pad.right;
+  const chartH = svgHeight - pad.top - pad.bottom;
+
+  const points = useMemo(() => {
+    if (timeline.length === 0) return [];
+    const maxScore = Math.max(...timeline.map((e) => e.score), 0.01);
+    return timeline.map((e, i) => {
+      const x = pad.left + (i / Math.max(timeline.length - 1, 1)) * chartW;
+      const y = pad.top + chartH - (e.score / maxScore) * chartH;
+      return { x, y, ...e };
+    });
+  }, [timeline, chartW, chartH]);
+
+  const yTicks = useMemo(() => {
+    const max = Math.max(...timeline.map((e) => e.score), 0.01);
+    return [0, 0.25, 0.5, 0.75, 1]
+      .filter((v) => v <= max)
+      .map((v) => ({
+        y: pad.top + chartH - (v / max) * chartH,
+        label: v.toFixed(2),
+      }));
+  }, [timeline, chartH]);
+
+  const xTicks = useMemo(() => {
+    if (timeline.length <= 1) return [];
+    const step = Math.max(1, Math.floor(timeline.length / 5));
+    return timeline
+      .filter((_, i) => i % step === 0 || i === timeline.length - 1)
+      .map((e, i, arr) => {
+        const idx = timeline.indexOf(e);
+        return {
+          x: pad.left + (idx / Math.max(timeline.length - 1, 1)) * chartW,
+          label: new Date(e.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' }),
+        };
+      });
+  }, [timeline, chartW]);
+
+  if (timeline.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[180px] font-mono text-caption text-ink-400">
+        No timeline data yet
+      </div>
+    );
+  }
+
+  return (
+    <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full max-w-[400px] h-auto">
+      {yTicks.map((t) => (
+        <g key={t.label}>
+          <line x1={pad.left} y1={t.y} x2={svgWidth - pad.right} y2={t.y} stroke="currentColor" className="text-ink-200" strokeWidth={1} />
+          <text x={pad.left - 6} y={t.y + 4} textAnchor="end" className="fill-ink-400" fontSize={10} fontFamily="Departure Mono, monospace">
+            {t.label}
+          </text>
+        </g>
+      ))}
+      {xTicks.map((t) => (
+        <text key={t.label} x={t.x} y={svgHeight - 6} textAnchor="middle" className="fill-ink-400" fontSize={9} fontFamily="Departure Mono, monospace">
+          {t.label}
+        </text>
+      ))}
+      <text x={pad.left} y={10} className="fill-ink-400 italic" fontSize={9} fontFamily="Departure Mono, monospace">
+        Score
+      </text>
+      {points.length > 1 && (
+        <polyline
+          points={points.map((p) => `${p.x},${p.y}`).join(' ')}
+          fill="none"
+          className="stroke-ink-300"
+          strokeWidth={2}
+        />
+      )}
+      {points.map((p, i) => (
+        <g key={i}>
+          <circle cx={p.x} cy={p.y} r={4} className={`fill-${bgHue} stroke-paper`} strokeWidth={2} />
+          <title>{`${p.date.slice(0, 10)}: ${p.score} (${p.tier})`}</title>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 export default function AdminPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [students, setStudents] = useState<Student[]>([]);
+  const [students, setStudents] = useState<StudentRow[]>([]);
   const [selected, setSelected] = useState<StudentDetail | null>(null);
   const [loading, setLoading] = useState(true);
+  const [filterTier, setFilterTier] = useState<CompositeTier | 'all'>('all');
   const [newEmail, setNewEmail] = useState('');
   const [newName, setNewName] = useState('');
 
@@ -58,7 +167,7 @@ export default function AdminPage() {
     });
     if (res.ok) {
       const d = await res.json();
-      setStudents((prev) => [d.data, ...prev]);
+      setStudents((prev) => [{ ...d.data, riskTier: 'green', compositeScore: 0 }, ...prev]);
       setNewEmail('');
       setNewName('');
     }
@@ -71,6 +180,31 @@ export default function AdminPage() {
       if (selected?.id === id) setSelected(null);
     }
   }
+
+  async function assessSelected() {
+    if (!selected) return;
+    await fetch(`/api/risk/composite?studentId=${selected.id}`);
+    const res = await fetch(`/api/admin/students/${selected.id}`);
+    const d = await res.json();
+    setSelected(d.data);
+    setStudents((prev) =>
+      prev.map((s) =>
+        s.id === selected.id
+          ? { ...s, riskTier: d.data.riskTier, compositeScore: d.data.compositeScore }
+          : s
+      )
+    );
+  }
+
+  const filtered = filterTier === 'all'
+    ? students
+    : students.filter((s) => s.riskTier === filterTier);
+
+  const counts = useMemo(() => {
+    const c = { green: 0, amber: 0, red: 0 };
+    for (const s of students) c[s.riskTier]++;
+    return c;
+  }, [students]);
 
   if (status === 'loading' || loading) {
     return (
@@ -93,6 +227,9 @@ export default function AdminPage() {
             Admin Panel
           </p>
           <h1 className="font-display text-heading font-bold">Student Management</h1>
+          <p className="font-mono text-caption text-ink-400 mt-2">
+            Composite risk scores: 60% rule engine + 40% ML sentiment analysis
+          </p>
         </header>
 
         <section className="animate-fade-in-up space-y-4">
@@ -126,38 +263,58 @@ export default function AdminPage() {
         </section>
 
         <section className="animate-fade-in-up space-y-6">
-          <h2 className="font-display text-subheading font-semibold">
-            Students ({students.length})
-          </h2>
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <h2 className="font-display text-subheading font-semibold">
+              Students ({students.length})
+            </h2>
+            <div className="flex gap-2">
+              {(['all', 'green', 'amber', 'red'] as const).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setFilterTier(t)}
+                  className={`font-mono text-caption px-3 py-1.5 border-brutal border-ink rounded-brutal-sm transition-all ${
+                    filterTier === t
+                      ? 'bg-ink text-paper shadow-brutal-sm'
+                      : 'bg-paper text-ink hover:shadow-brutal-sm'
+                  }`}
+                >
+                  {t === 'all' ? 'All' : `${t} (${counts[t]})`}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
                 <tr className="border-b-2 border-ink">
-                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">
-                    Name
-                  </th>
-                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">
-                    Email
-                  </th>
-                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic hidden sm:table-cell">
-                    Created
-                  </th>
-                  <th className="font-mono text-caption uppercase tracking-wider text-right py-3 italic">
-                    Actions
-                  </th>
+                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">Tier</th>
+                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">Name</th>
+                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">Email</th>
+                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic">Score</th>
+                  <th className="font-mono text-caption uppercase tracking-wider text-left py-3 pr-4 italic hidden sm:table-cell">Created</th>
+                  <th className="font-mono text-caption uppercase tracking-wider text-right py-3 italic">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {students.map((s) => (
+                {filtered.map((s) => (
                   <tr
                     key={s.id}
                     className="border-b border-ink-200 hover:bg-ink-100/50 transition-colors cursor-pointer"
                     onClick={() => selectStudent(s.id)}
                   >
+                    <td className="py-3 pr-4">
+                      <div className={`w-3 h-3 rounded-full ${tierDot(s.riskTier)}`} />
+                    </td>
                     <td className="py-3 pr-4 font-display text-body-sm font-medium">
                       {s.name ?? '—'}
                     </td>
                     <td className="py-3 pr-4 text-body-sm text-ink-500">{s.email}</td>
+                    <td className="py-3 pr-4">
+                      <span className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${tierColor(s.riskTier)}`}>
+                        {s.compositeScore.toFixed(2)}
+                      </span>
+                    </td>
                     <td className="py-3 pr-4 font-mono text-caption text-ink-400 hidden sm:table-cell">
                       {new Date(s.createdAt).toLocaleDateString()}
                     </td>
@@ -174,10 +331,10 @@ export default function AdminPage() {
                     </td>
                   </tr>
                 ))}
-                {students.length === 0 && (
+                {filtered.length === 0 && (
                   <tr>
-                    <td colSpan={4} className="py-8 text-center font-mono text-caption text-ink-400">
-                      No students yet
+                    <td colSpan={6} className="py-8 text-center font-mono text-caption text-ink-400">
+                      No students match this tier
                     </td>
                   </tr>
                 )}
@@ -188,9 +345,32 @@ export default function AdminPage() {
 
         {selected && (
           <section className="animate-fade-in-up space-y-8">
-            <h2 className="font-display text-subheading font-semibold">
-              {selected.name ?? selected.email}
-            </h2>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="font-display text-subheading font-semibold">
+                  {selected.name ?? selected.email}
+                </h2>
+                <div className="flex items-center gap-2 mt-1">
+                  <div className={`w-2.5 h-2.5 rounded-full ${tierDot(selected.riskTier)}`} />
+                  <span className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${tierColor(selected.riskTier)}`}>
+                    {selected.riskTier} · {selected.compositeScore.toFixed(3)}
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={assessSelected}
+                className="px-4 py-2 bg-ink text-paper font-display text-body-sm font-semibold border-brutal border-ink rounded-brutal-sm shadow-brutal-sm hover:shadow-brutal transition-all active:translate-x-0.5 active:translate-y-0.5"
+              >
+                Re-assess Now
+              </button>
+            </div>
+
+            <div className="border-brutal border-ink rounded-brutal-sm p-4 space-y-4">
+              <p className="font-mono text-caption uppercase tracking-wider italic text-ink-400">
+                Composite Risk Timeline
+              </p>
+              <TimelineChart timeline={selected.timeline} tier={selected.riskTier} />
+            </div>
 
             <div className="grid gap-6 sm:grid-cols-2">
               <div className="border-brutal border-ink rounded-brutal-sm p-4 space-y-3">
@@ -201,13 +381,18 @@ export default function AdminPage() {
                   <p className="font-mono text-caption text-ink-400">No data</p>
                 ) : (
                   selected.riskScores.map((r, i) => (
-                    <div key={i} className="flex items-center justify-between">
+                    <div key={i} className="flex items-center justify-between gap-2">
                       <span className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${
                         r.level === 'CRITICAL' ? 'bg-accent text-paper' :
                         r.level === 'HIGH' ? 'bg-accent/80 text-paper' :
                         r.level === 'MEDIUM' ? 'bg-ink-300 text-ink' :
                         'bg-ink-100 text-ink-600'
                       }`}>{r.level}</span>
+                      {r.tier && (
+                        <span className={`font-mono text-caption px-1.5 py-0.5 rounded-brutal-sm ${tierColor(r.tier as CompositeTier)}`}>
+                          {r.tier}
+                        </span>
+                      )}
                       <span className="font-mono text-body-sm">{r.score.toFixed(1)}</span>
                       <span className="font-mono text-caption text-ink-400">
                         {new Date(r.computedAt).toLocaleDateString()}
@@ -246,7 +431,7 @@ export default function AdminPage() {
                   <p className="font-mono text-caption text-ink-400">No data</p>
                 ) : (
                   selected.interventions.map((iv, i) => (
-                    <div key={i} className="flex items-center justify-between">
+                    <div key={i} className="flex items-center justify-between gap-2">
                       <span className="font-mono text-caption bg-ink-100 px-1.5 py-0.5 rounded-brutal-sm">
                         {iv.type.replace(/_/g, ' ')}
                       </span>
